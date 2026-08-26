@@ -1,0 +1,28 @@
+{
+  "scopeName": "source.digistar",
+  "patterns": [
+    { "include": "#keywords" },
+    { "include": "#strings" }
+  ],
+  "repository": {
+    "keywords": {
+      "patterns": [
+        { "match": "^\\s*\\+?[0-9:.]+",
+          "name": "constant.numeric.timestamp" },
+        { "match": "\\b(capture|dome|eye|js|scene|script)\\b",
+          "name": "keyword.control.digistar" }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.digistar",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.digistar",
+          "match": "\\\\."
+        }
+      ]
+    }
+  }
+}
