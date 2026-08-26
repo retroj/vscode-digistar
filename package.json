@@ -24,7 +24,13 @@
         "scopeName": "source.digistar",
         "path": "./syntaxes/digistar.tmGrammar.json"
       }
-    ]
+    ],
+    "configurationDefaults": {
+      "[digistar]": {
+        "editor.tabSize": 12,
+        "editor.insertSpaces": false
+      }
+    }
   },
   "files": [
     "LICENSE.md",
