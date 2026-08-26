@@ -8,6 +8,8 @@ npx @vscode/vsce package --out ../jjfoerch.digistar-0.0.1.vsix
 
 ### TypeScript?
 
+npm install
+
 Open extension root folder in VS Code.
 
 Start the Watcher (Ctrl+Shift+B) and select the watch task.
