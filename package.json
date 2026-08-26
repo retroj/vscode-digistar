@@ -52,10 +52,11 @@
   "files": [
     "LICENSE.md",
     "README.md",
-    "syntaxes/digistar.tmGrammar.json"
+    "syntaxes/digistar.tmGrammar.json",
+    "out/extension.js"
   ],
   "devDependencies": {
     "@types/node": "^26.3.0",
-    "@types/vscode": "^1.134.0"
+    "@types/vscode": "^1.90.0"
   }
 }
