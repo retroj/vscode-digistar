@@ -6,7 +6,7 @@
   "repository": "github:retroj/vscode-digistar",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.90.0"
   },
   "categories": [
     "Programming Languages"
@@ -15,7 +15,10 @@
     "languages": [
       {
         "id": "digistar",
-        "extensions": [".ds", ".lis"]
+        "extensions": [
+          ".ds",
+          ".lis"
+        ]
       }
     ],
     "grammars": [
@@ -31,11 +34,28 @@
         "editor.insertSpaces": false,
         "editor.renderWhitespace": "trailing"
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "digistar.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
   },
   "files": [
     "LICENSE.md",
     "README.md",
     "syntaxes/digistar.tmGrammar.json"
-  ]
+  ],
+  "devDependencies": {
+    "@types/node": "^26.3.0",
+    "@types/vscode": "^1.134.0"
+  }
 }
