@@ -28,7 +28,8 @@
     "configurationDefaults": {
       "[digistar]": {
         "editor.tabSize": 12,
-        "editor.insertSpaces": false
+        "editor.insertSpaces": false,
+        "editor.renderWhitespace": "trailing"
       }
     }
   },
