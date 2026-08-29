@@ -2,17 +2,17 @@
 import * as vscode from 'vscode';
 
 interface CustomToken {
-    char: number;
-    length: number;
-    typeIndex: number;
-    modifierIndex: number;
+    char: number;          // Starting character index on the line
+    length: number;        // How many characters wide the token is
+    typeIndex: number;     // Index of the token type in 'tokenTypes' array
+    modifierIndex: number; // Index of the modifier in 'tokenModifiers' array
 }
 
 // Store tokens per document URI: { "file://...": [ [Tokens for Line 0], [Tokens for Line 1] ] }
 const tokenCache = new Map<string, CustomToken[][]>();
-const tokenTypes: string[] = ['keyword', 'variable', 'string', 'number', 'comment'];
-const tokenModifiers: string[] = ['declaration', 'documentation'];
-const legend = new vscode.SemanticTokensLegend(tokenTypes, tokenModifiers);
+const legend = new vscode.SemanticTokensLegend(
+    ['keyword', 'variable', 'string', 'number', 'comment'], // token types
+    ['declaration', 'documentation']); // token modifiers
 
 class IncrementalSemanticTokensProvider implements vscode.DocumentSemanticTokensProvider {
     private _onDidChangeSemanticTokens = new vscode.EventEmitter<void>();
@@ -55,8 +55,7 @@ class IncrementalSemanticTokensProvider implements vscode.DocumentSemanticTokens
 
 
 /**
- * Your custom tokenizer logic.
- * Because lines are independent, this only processes a single line string at a time.
+ * Tokenizer logic for a single line
  */
 function tokenizeSingleLine (lineText: string): CustomToken[] {
     const tokens: CustomToken[] = [];
@@ -68,8 +67,8 @@ function tokenizeSingleLine (lineText: string): CustomToken[] {
         tokens.push({
             char: match.index,
             length: match[0].length,
-            typeIndex: tokenTypes.indexOf('keyword'),    // Maps to 'keyword'
-            modifierIndex: 0                            // No modifiers
+            typeIndex: legend.tokenTypes.indexOf('keyword'),
+            modifierIndex: 0
         });
     }
     // -----------------------------------------------------------------
@@ -152,12 +151,6 @@ export function activate (context: vscode.ExtensionContext) {
         debounceTimer = setTimeout(() => {
             provider.refresh(); // Forces VS Code to fetch the updated cache data
         }, 150); 
-
-        // 3. Re-parse ONLY the null/dirty lines right now (with debouncing recommended)
-        //reparseDirtyLines(event.document, fileCache);
-
-        // 4. Force VS Code to call provideDocumentSemanticTokens() and read the fresh cache
-        //provider.fireCacheUpdate();
     });
     context.subscriptions.push(changeSubscription);
 
@@ -174,7 +167,6 @@ export function activate (context: vscode.ExtensionContext) {
     let disposable = vscode.commands.registerCommand('digistar.helloWorld', () => {
         vscode.window.showInformationMessage('Hello Digistar!');
     });
-
     context.subscriptions.push(disposable);
 
 
