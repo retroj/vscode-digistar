@@ -1,7 +1,7 @@
 {
   "name": "digistar",
   "publisher": "digistarusersgroup",
-  "displayName": "Digistar Script Syntax Highlighter",
+  "displayName": "Digistar Script",
   "description": "Syntax highlighting for Digsitar Script",
   "repository": "github:retroj/vscode-digistar",
   "version": "0.0.1",
