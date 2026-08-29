@@ -32,6 +32,7 @@
       "[digistar]": {
         "editor.tabSize": 12,
         "editor.insertSpaces": false,
+        "editor.detectIndentation": false,
         "editor.renderWhitespace": "trailing"
       }
     },
