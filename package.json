@@ -1,6 +1,6 @@
 {
   "name": "digistar",
-  "publisher": "jjfoerch",
+  "publisher": "digistarusersgroup",
   "displayName": "Digistar Script Syntax Highlighter",
   "description": "Syntax highlighting for Digsitar Script",
   "repository": "github:retroj/vscode-digistar",

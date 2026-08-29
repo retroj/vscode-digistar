@@ -1,7 +1,7 @@
 
 ## Build
 
-npx @vscode/vsce package --out ../jjfoerch.digistar-0.0.1.vsix
+npx @vscode/vsce package
 
 
 ## Various Development Notes
