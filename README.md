@@ -1,8 +1,34 @@
 
 ## Build
+### Install nodejs
 
-npx @vscode/vsce package
+Install Node.js.  For a typical installation on Windows, visit https://nodejs.org/en/download and download the MSI package for the LTS release (long-term support), then run it and follow prompts.
 
+### Install VS Code support packages
+
+Globally install the vsce executable (VS Code Extension Manager).  Use the following command in a command line terminal:
+
+ : npm install -g @nodejs/vsce
+
+### npm install
+
+After cloning or updating the project repository, install support libraries.  This will download the necessary libraries into the `node_modules` directory.
+
+Open a command line terminal in the vscode-digistar directory, and run the following command:
+
+ : npm install
+
+### vsce package
+
+Build the extension package with vsce (VS Code Extension Manager)
+
+ : npx @vscode/vsce package
+
+This will create digistar-0.0.1.vsix.
+
+### Install the package
+
+Open VS Code.  Open its extension manager (Ctrl+Shift+X).  From the `...` drop-down menu, select `Install from VSIX...`, and then find and select digistar-0.0.1.vsix.
 
 ## Various Development Notes
 
