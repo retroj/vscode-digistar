@@ -14,18 +14,71 @@ const legend = new vscode.SemanticTokensLegend(
     ['keyword', 'variable', 'string', 'number', 'comment'], // token types
     ['declaration', 'documentation']); // token modifiers
 
-class IncrementalSemanticTokensProvider implements vscode.DocumentSemanticTokensProvider {
+
+/**
+ * Tokenizer logic for a single line
+ */
+function tokenizeSingleLine (lineText: string): CustomToken[] {
+    const line_re = /^\s*(?<timestamp>\+?[0-9:.]+)?\s*(?<objectname>\w+)/d;
+    let tokens: CustomToken[] = [];
+    let match: RegExpExecArray | null = line_re.exec(lineText);
+    if (match) {
+        let indices_timestamp = match.indices?.groups?.timestamp;
+        let indices_objectname = match.indices?.groups?.objectname;
+        if (indices_timestamp && match.groups?.timestamp !== "") {
+            tokens.push({
+                char: indices_timestamp[0],
+                length: indices_timestamp[1] - indices_timestamp[0],
+                typeIndex: legend.tokenTypes.indexOf('number'),
+                modifierIndex: 0
+            });
+        }
+        if (indices_objectname) {
+            let keywords = ['capture','dome','eye','js','scene','script']
+            if (match.groups?.objectname && keywords.indexOf(match.groups?.objectname) > -1) {
+                tokens.push({
+                    char: indices_objectname[0],
+                    length: indices_objectname[1] - indices_objectname[0],
+                    typeIndex: legend.tokenTypes.indexOf('keyword'),
+                    modifierIndex: 0
+                });
+            }
+        }
+    }
+    return tokens;
+}
+
+
+/**
+ * Performs a full file scan when a document is first encountered.
+ */
+function parseEntireFile (document: vscode.TextDocument): void {
+    const uri = document.uri.toString();
+    const linesCount = document.lineCount;
+    const fileLinesArray: CustomToken[][] = new Array(linesCount);
+
+    for (let i = 0; i < linesCount; i++) {
+        fileLinesArray[i] = tokenizeSingleLine(document.lineAt(i).text);
+    }
+
+    tokenCache.set(uri, fileLinesArray);
+}
+
+
+class IncrementalSemanticTokensProvider
+implements vscode.DocumentSemanticTokensProvider
+{
     private _onDidChangeSemanticTokens = new vscode.EventEmitter<void>();
     readonly onDidChangeSemanticTokens = this._onDidChangeSemanticTokens.event;
 
-    public provideDocumentSemanticTokens (document : vscode.TextDocument)
+    public provideDocumentSemanticTokens (document: vscode.TextDocument)
         : vscode.ProviderResult<vscode.SemanticTokens>
     {
         const builder = new vscode.SemanticTokensBuilder();
         const uri = document.uri.toString();
 
         // 1. Initialize cache for new files
-        if (!tokenCache.has(uri)) {
+        if (! tokenCache.has(uri)) {
             parseEntireFile(document);
         }
 
@@ -48,55 +101,13 @@ class IncrementalSemanticTokensProvider implements vscode.DocumentSemanticTokens
     }
 
     refresh () {
-        console.log("refresh");
         this._onDidChangeSemanticTokens.fire();
     }
 }
 
 
-/**
- * Tokenizer logic for a single line
- */
-function tokenizeSingleLine (lineText: string): CustomToken[] {
-    const tokens: CustomToken[] = [];
-    
-    // --- SAMPLE PARSING LOGIC (Replace this with your actual lexer) ---
-    const regex = /\b(if|else|return|function|var|let|const)\b/g;
-    let match: RegExpExecArray | null;
-    while ((match = regex.exec(lineText)) !== null) {
-        tokens.push({
-            char: match.index,
-            length: match[0].length,
-            typeIndex: legend.tokenTypes.indexOf('keyword'),
-            modifierIndex: 0
-        });
-    }
-    // -----------------------------------------------------------------
-
-    return tokens;
-}
-
-
-/**
- * Performs a full file scan when a document is first encountered.
- */
-function parseEntireFile (document: vscode.TextDocument): void {
-    const uri = document.uri.toString();
-    const linesCount = document.lineCount;
-    const fileLinesArray: CustomToken[][] = new Array(linesCount);
-
-    for (let i = 0; i < linesCount; i++) {
-        fileLinesArray[i] = tokenizeSingleLine(document.lineAt(i).text);
-    }
-
-    tokenCache.set(uri, fileLinesArray);
-}
-
-
-export function activate (context: vscode.ExtensionContext) {
-    console.log(`Digistar Script extension activated`);
-
-    const provider = new IncrementalSemanticTokensProvider();
+function activate_textchange (context: vscode.ExtensionContext) {
+    const provider = new IncrementalSemanticTokensProvider(); //
     const selector: vscode.DocumentSelector = { language: 'digistar', scheme: 'file' };
     context.subscriptions.push(
         vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend));
@@ -160,7 +171,13 @@ export function activate (context: vscode.ExtensionContext) {
         tokenCache.delete(document.uri.toString());
     });
     context.subscriptions.push(closeSubscription);
+}
 
+
+export function activate (context: vscode.ExtensionContext) {
+    console.log(`Digistar Script extension activated`);
+
+    activate_textchange(context);
 
     // Commands
     //

@@ -7,10 +7,6 @@
   "repository": {
     "keywords": {
       "patterns": [
-        { "match": "^\\s*\\+?[0-9:.]+",
-          "name": "constant.numeric.timestamp" },
-        { "match": "\\b(capture|dome|eye|js|scene|script)\\b",
-          "name": "keyword.control.digistar" }
       ]
     },
     "strings": {
