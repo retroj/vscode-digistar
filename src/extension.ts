@@ -23,16 +23,7 @@ function tokenizeSingleLine (lineText: string): CustomToken[] {
     let tokens: CustomToken[] = [];
     let match: RegExpExecArray | null = line_re.exec(lineText);
     if (match) {
-        let indices_timestamp = match.indices?.groups?.timestamp;
         let indices_objectname = match.indices?.groups?.objectname;
-        if (indices_timestamp && match.groups?.timestamp !== "") {
-            tokens.push({
-                char: indices_timestamp[0],
-                length: indices_timestamp[1] - indices_timestamp[0],
-                typeIndex: legend.tokenTypes.indexOf('number'),
-                modifierIndex: 0
-            });
-        }
         if (indices_objectname) {
             let keywords = ['capture','dome','eye','js','scene','script']
             if (match.groups?.objectname && keywords.indexOf(match.groups?.objectname) > -1) {

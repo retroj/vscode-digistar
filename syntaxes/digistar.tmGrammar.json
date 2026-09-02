@@ -7,6 +7,8 @@
   "repository": {
     "keywords": {
       "patterns": [
+        { "match": "^\\s*\\+?[0-9:.]+",
+          "name": "constant.numeric.timestamp" }
       ]
     },
     "strings": {
