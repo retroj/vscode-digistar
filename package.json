@@ -4,7 +4,7 @@
   "displayName": "Digistar Script",
   "description": "Syntax highlighting for Digsitar Script",
   "repository": "github:retroj/vscode-digistar",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.90.0"
   },
