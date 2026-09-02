@@ -19,7 +19,7 @@ const legend = new vscode.SemanticTokensLegend(
  * Tokenizer logic for a single line
  */
 function tokenizeSingleLine (lineText: string): CustomToken[] {
-    const line_re = /^\s*(?<timestamp>\+?[0-9:.]+)?\s*(?<objectname>\w+)/d;
+    const line_re = /^[0-9:.+\s]*(?<objectname>\w+)/d;
     let tokens: CustomToken[] = [];
     let match: RegExpExecArray | null = line_re.exec(lineText);
     if (match) {
