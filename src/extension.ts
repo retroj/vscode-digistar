@@ -1,6 +1,7 @@
 
 import * as vscode from 'vscode';
 
+
 interface CustomToken {
     char: number;          // Starting character index on the line
     length: number;        // How many characters wide the token is
@@ -8,73 +9,74 @@ interface CustomToken {
     modifierIndex: number; // Index of the modifier in 'tokenModifiers' array
 }
 
-// Store tokens per document URI: { "file://...": [ [Tokens for Line 0], [Tokens for Line 1] ] }
-const tokenCache = new Map<string, CustomToken[][]>();
-const legend = new vscode.SemanticTokensLegend(
-    ['keyword', 'variable', 'string', 'number', 'comment'], // token types
-    ['declaration', 'documentation']); // token modifiers
 
-
-/**
- * Tokenizer logic for a single line
- */
-function tokenizeSingleLine (lineText: string): CustomToken[] {
-    const line_re = /^[0-9:.+\s]*(?<objectname>\w+)/d;
-    let tokens: CustomToken[] = [];
-    let match: RegExpExecArray | null = line_re.exec(lineText);
-    if (match) {
-        let indices_objectname = match.indices?.groups?.objectname;
-        if (indices_objectname) {
-            let keywords = ['capture','dome','eye','js','scene','script']
-            if (match.groups?.objectname && keywords.indexOf(match.groups?.objectname) > -1) {
-                tokens.push({
-                    char: indices_objectname[0],
-                    length: indices_objectname[1] - indices_objectname[0],
-                    typeIndex: legend.tokenTypes.indexOf('keyword'),
-                    modifierIndex: 0
-                });
-            }
-        }
-    }
-    return tokens;
-}
-
-
-/**
- * Performs a full file scan when a document is first encountered.
- */
-function parseEntireFile (document: vscode.TextDocument): void {
-    const uri = document.uri.toString();
-    const linesCount = document.lineCount;
-    const fileLinesArray: CustomToken[][] = new Array(linesCount);
-
-    for (let i = 0; i < linesCount; i++) {
-        fileLinesArray[i] = tokenizeSingleLine(document.lineAt(i).text);
-    }
-
-    tokenCache.set(uri, fileLinesArray);
-}
-
-
-class IncrementalSemanticTokensProvider
+class DigistarScriptSemanticHighlighter
 implements vscode.DocumentSemanticTokensProvider
 {
     private _onDidChangeSemanticTokens = new vscode.EventEmitter<void>();
     readonly onDidChangeSemanticTokens = this._onDidChangeSemanticTokens.event;
 
-    public provideDocumentSemanticTokens (document: vscode.TextDocument)
+    // Store tokens per document URI: { "file://...": [ [Tokens for Line 0], [Tokens for Line 1] ] }
+    tokenCache = new Map<string, CustomToken[][]>();
+
+    readonly legend = new vscode.SemanticTokensLegend(
+        ['keyword', 'variable', 'string', 'number', 'comment'], // token types
+        ['declaration', 'documentation']); // token modifiers
+
+    /**
+    * Tokenizer logic for a single line
+    */
+    tokenize_line (lineText: string): CustomToken[] {
+        const line_re = /^[0-9:.+\s]*(?<objectname>\w+)/d;
+        let tokens: CustomToken[] = [];
+        let match: RegExpExecArray | null = line_re.exec(lineText);
+        if (match) {
+            let indices_objectname = match.indices?.groups?.objectname;
+            if (indices_objectname) {
+                let keywords = ['capture','dome','eye','js','scene','script']
+                if (match.groups?.objectname && keywords.indexOf(match.groups?.objectname) > -1) {
+                    tokens.push({
+                        char: indices_objectname[0],
+                        length: indices_objectname[1] - indices_objectname[0],
+                        typeIndex: this.legend.tokenTypes.indexOf('keyword'),
+                        modifierIndex: 0
+                    });
+                }
+            }
+        }
+        return tokens;
+    }
+
+
+    /**
+    * Performs a full file scan when a document is first encountered.
+    */
+    parse_document (document: vscode.TextDocument): void {
+        const uri = document.uri.toString();
+        const linesCount = document.lineCount;
+        const fileLinesArray: CustomToken[][] = new Array(linesCount);
+
+        for (let i = 0; i < linesCount; i++) {
+            fileLinesArray[i] = this.tokenize_line(document.lineAt(i).text);
+        }
+
+        this.tokenCache.set(uri, fileLinesArray);
+    }
+
+
+    provideDocumentSemanticTokens (document: vscode.TextDocument)
         : vscode.ProviderResult<vscode.SemanticTokens>
     {
         const builder = new vscode.SemanticTokensBuilder();
         const uri = document.uri.toString();
 
         // 1. Initialize cache for new files
-        if (! tokenCache.has(uri)) {
-            parseEntireFile(document);
+        if (! this.tokenCache.has(uri)) {
+            this.parse_document(document);
         }
 
         // 2. Fetch the updated/shifted cache
-        const fileCache = tokenCache.get(uri);
+        const fileCache = this.tokenCache.get(uri);
         if (! fileCache) {
             return builder.build();
         }
@@ -91,32 +93,23 @@ implements vscode.DocumentSemanticTokensProvider
         return builder.build();
     }
 
+
     refresh () {
         this._onDidChangeSemanticTokens.fire();
     }
-}
 
-
-function activate_textchange (context: vscode.ExtensionContext) {
-    const provider = new IncrementalSemanticTokensProvider(); //
-    const selector: vscode.DocumentSelector = { language: 'digistar', scheme: 'file' };
-    context.subscriptions.push(
-        vscode.languages.registerDocumentSemanticTokensProvider(selector, provider, legend));
-    let debounceTimer: any;
-
-    // Text changes
-    //
-    let changeSubscription = vscode.workspace.onDidChangeTextDocument((event) => {
+    debounceTimer: any;
+    onDidChangeTextDocument (event: vscode.TextDocumentChangeEvent) {
         if (event.document.languageId !== 'digistar') {
             return;
         }
         const uri = event.document.uri.toString();
-        if (! tokenCache.has(uri)) {
-            parseEntireFile(event.document);
-            provider.refresh();
+        if (! this.tokenCache.has(uri)) {
+            this.parse_document(event.document);
+            this.refresh();
             return;
         }
-        let fileCache = tokenCache.get(uri);
+        let fileCache = this.tokenCache.get(uri);
         if (! fileCache) {
             return;
         }
@@ -137,38 +130,53 @@ function activate_textchange (context: vscode.ExtensionContext) {
                 fileCache.splice(startLine + 1, Math.abs(netChange));
             }
 
-            // 2. Mark the affected lines as null (dirty) so they get re-parsed
+            // 2. Re-parse changed lines
             for (let i = startLine; i <= startLine + linesAdded; i++) {
                 if (i < event.document.lineCount) {
                     const currentLineText = event.document.lineAt(i).text;
-                    fileCache[i] = tokenizeSingleLine(currentLineText);
+                    fileCache[i] = this.tokenize_line(currentLineText);
                 }
             }
         }
 
-        if (debounceTimer) {
-            clearTimeout(debounceTimer);
+        if (this.debounceTimer) {
+            clearTimeout(this.debounceTimer);
         }
         
-        debounceTimer = setTimeout(() => {
-            provider.refresh(); // Forces VS Code to fetch the updated cache data
+        this.debounceTimer = setTimeout(() => {
+            this.refresh();
         }, 150); 
-    });
-    context.subscriptions.push(changeSubscription);
+    }
 
+    activate (context: vscode.ExtensionContext) {
+        const selector: vscode.DocumentSelector = { language: 'digistar', scheme: 'file' };
+        context.subscriptions.push(
+            vscode.languages.registerDocumentSemanticTokensProvider(selector, this, this.legend));
 
-    // 4. Cleanup memory cache when a text document is closed
-    const closeSubscription = vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument) => {
-        tokenCache.delete(document.uri.toString());
-    });
-    context.subscriptions.push(closeSubscription);
+        // Text changes
+        //
+        let changeSubscription = vscode.workspace.onDidChangeTextDocument(event => this.onDidChangeTextDocument(event));
+        context.subscriptions.push(changeSubscription);
+
+        // 4. Cleanup memory cache when a text document is closed
+        const closeSubscription = vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument) => {
+            this.tokenCache.delete(document.uri.toString());
+        });
+        context.subscriptions.push(closeSubscription);
+    }
 }
 
+
+/*
+ * Extension Interface
+ */ 
+
+const semanticHighlighter = new DigistarScriptSemanticHighlighter();
 
 export function activate (context: vscode.ExtensionContext) {
     console.log(`Digistar Script extension activated`);
 
-    activate_textchange(context);
+    semanticHighlighter.activate(context);
 
     // Commands
     //
@@ -177,19 +185,18 @@ export function activate (context: vscode.ExtensionContext) {
     });
     context.subscriptions.push(disposable);
 
-
     // Configuration defaults can be ignored when a window is initially opened and the extension
     // has not yet been activated.  This is a workaround to enforce our default tabSize or the
     // configured editor.tabSize for "[digistar]" in local settings.json.
-    vscode.window.visibleTextEditors.forEach(editor => {
+    for (let editor of vscode.window.visibleTextEditors) {
         if (editor.document.languageId === 'digistar') {
             const config = vscode.workspace.getConfiguration('editor', { languageId: 'digistar' });
             const activeTabSize = config.get<number>('tabSize');
             editor.options.tabSize = activeTabSize;
         }
-    });
+    }
 }
 
 export function deactivate () {
-    tokenCache.clear();
+    semanticHighlighter.tokenCache.clear();
 }
