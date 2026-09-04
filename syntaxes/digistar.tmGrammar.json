@@ -3,7 +3,7 @@
   "patterns": [
     { "include": "#errors" },
     { "include": "#comments" },
-    { "include": "#keywords" },
+    { "include": "#timestamps" },
     { "include": "#strings" }
   ],
   "repository": {
@@ -19,7 +19,7 @@
           "match": "[#;].*$" }
       ]
     },
-    "keywords": {
+    "timestamps": {
       "patterns": [
         { "match": "^\\s*\\+?[0-9:.]+",
           "name": "constant.numeric.timestamp" }
