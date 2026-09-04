@@ -1,11 +1,18 @@
 {
   "scopeName": "source.digistar",
   "patterns": [
+    { "include": "#errors" },
     { "include": "#comments" },
     { "include": "#keywords" },
     { "include": "#strings" }
   ],
   "repository": {
+    "errors": {
+      "patterns": [
+        { "name": "invalid.illegal.digistar",
+          "match": "^!.*$" }
+      ]
+    },
     "comments": {
       "patterns": [
         { "name": "comment.line.digistar",
