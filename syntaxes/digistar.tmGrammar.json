@@ -4,6 +4,7 @@
     { "include": "#errors" },
     { "include": "#comments" },
     { "include": "#timestamps" },
+    { "include": "#durations" },
     { "include": "#strings" }
   ],
   "repository": {
@@ -22,7 +23,16 @@
     "timestamps": {
       "patterns": [
         { "match": "^\\s*\\+?[0-9:.]+",
-          "name": "constant.numeric.timestamp" }
+          "name": "constant.numeric.timestamp.digistar" }
+      ]
+    },
+    "durations": {
+      "patterns": [
+        { "match": "\\b(dur(?:ation)?)[0-9:.%\\s]*(?=$|[#;])",
+          "captures": {
+            "1": { "name": "keyword.other.duration.digistar" }
+          }
+        }
       ]
     },
     "strings": {
