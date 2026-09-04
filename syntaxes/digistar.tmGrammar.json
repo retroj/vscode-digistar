@@ -1,10 +1,17 @@
 {
   "scopeName": "source.digistar",
   "patterns": [
+    { "include": "#comments" },
     { "include": "#keywords" },
     { "include": "#strings" }
   ],
   "repository": {
+    "comments": {
+      "patterns": [
+        { "name": "comment.line.digistar",
+          "match": "[#;].*$" }
+      ]
+    },
     "keywords": {
       "patterns": [
         { "match": "^\\s*\\+?[0-9:.]+",
