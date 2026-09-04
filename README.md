@@ -9,7 +9,7 @@ Install Node.js.  For a typical installation on Windows, visit https://nodejs.or
 Globally install the vsce executable (VS Code Extension Manager).  Use the following command in a command line terminal:
 
 ```bash
-npm install -g @nodejs/vsce
+npm install -g @vscode/vsce
 ```
 
 ### npm install
