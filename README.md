@@ -54,4 +54,3 @@ https://macromates.com/manual/en/language_grammars
 
 https://www.apeth.com/nonblog/stories/textmatebundle.html
 
-It may be better to make a semantic grammar instead of a syntax grammar.  Syntax grammars are limited to what we can determine with regexps, while a semantic grammar would presumably allow us to parse each line.
