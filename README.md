@@ -34,7 +34,8 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
 
 ### Commands and Key Bindings
 
- - tab: indent line
+ - tab: indent line (timestamp at column 0, command at 1 tab)
+ - enter: auto-indent and whitespace cleanup
 
 ### Development
 
@@ -43,9 +44,9 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
 
 ## Installation
 
-The easiest way to install this extension is to download the latest VSI package from the Releases section of the project Github page, and use VS Code's extension manager to install it.
+The easiest way to install this extension is to download the latest VSIX package from the Releases section of the project Github page, and use VS Code's extension manager to install it.
 
-Open VS Code.  Open its extension manager (Ctrl+Shift+X).  From the `...` drop-down menu, select `Install from VSIX...`, and then find and select digistar-0.0.1.vsix.
+Open VS Code.  Open its extension manager (Ctrl+Shift+X).  From the `...` drop-down menu, select `Install from VSIX...`, and then find and select digistar-x.x.x.vsix.
 
 
 ## Build
@@ -56,7 +57,13 @@ If you would like to build the package for yourself in order to modify it or run
 
 Install Node.js.  For a typical installation on Windows, visit https://nodejs.org/en/download and download the MSI package for the LTS release (long-term support), then run it and follow prompts.
 
-### 2. Install VS Code support packages
+### 2. Install TypeScript
+
+```bash
+npm install -g typescript
+```
+
+### 3. Install VS Code support packages
 
 Globally install the vsce executable (VS Code Extension Manager).  Use the following command in a command line terminal:
 
@@ -64,7 +71,7 @@ Globally install the vsce executable (VS Code Extension Manager).  Use the follo
 npm install -g @vscode/vsce
 ```
 
-### 3. npm install
+### 4. npm install
 
 After cloning or updating the project repository, install support libraries.  This will download the necessary libraries into the `node_modules` directory.
 
@@ -74,7 +81,7 @@ Open a command line terminal in the vscode-digistar directory, and run the follo
 npm install
 ```
 
-### 4. vsce package
+### 5. vsce package
 
 Build the extension package with vsce (VS Code Extension Manager)
 
@@ -82,11 +89,11 @@ Build the extension package with vsce (VS Code Extension Manager)
 npx @vscode/vsce package
 ```
 
-This will create digistar-0.0.1.vsix.
+This will create digistar-x.x.x.vsix.
 
-### 5. Install the package
+### 6. Install the package
 
-Open VS Code.  Open its extension manager (Ctrl+Shift+X).  From the `...` drop-down menu, select `Install from VSIX...`, and then find and select digistar-0.0.1.vsix.
+Open VS Code.  Open its extension manager (Ctrl+Shift+X).  From the `...` drop-down menu, select `Install from VSIX...`, and then find and select digistar-x.x.x.vsix.
 
 ## How to Run the Extension in Debug Mode
 
