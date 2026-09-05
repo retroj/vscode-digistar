@@ -18,7 +18,8 @@
         "extensions": [
           ".ds",
           ".lis"
-        ]
+        ],
+        "configuration": "./language-configuration.json"
       }
     ],
     "grammars": [
@@ -55,6 +56,7 @@
   "files": [
     "LICENSE.md",
     "README.md",
+    "language-configuration.json",
     "syntaxes/digistar.tmGrammar.json",
     "out/extension.js"
   ],
