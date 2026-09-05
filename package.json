@@ -70,7 +70,8 @@
     "README.md",
     "language-configuration.json",
     "syntaxes/digistar.tmGrammar.json",
-    "out/extension.js"
+    "out/extension.js",
+    "out/commands.js"
   ],
   "devDependencies": {
     "@types/node": "^26.3.0",
