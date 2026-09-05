@@ -23,28 +23,28 @@ implements vscode.DocumentSemanticTokensProvider
         ['keyword', 'variable', 'string', 'number', 'comment'], // token types
         ['declaration', 'documentation']); // token modifiers
 
+    special_objects = new Set(['capture','dome','eye','js','navigation','scene','script','system']);
+
     /**
     * Tokenizer logic for a single line
     */
-    tokenize_line (lineText: string): CustomToken[] {
-        const line_re = /^[0-9:.+\s]*(?<objectname>\w+)/d;
-        let tokens: CustomToken[] = [];
-        let match: RegExpExecArray | null = line_re.exec(lineText);
-        if (match) {
-            let indices_objectname = match.indices?.groups?.objectname;
-            if (indices_objectname) {
-                let keywords = ['capture','dome','eye','js','scene','script']
-                if (match.groups?.objectname && keywords.indexOf(match.groups?.objectname) > -1) {
-                    tokens.push({
-                        char: indices_objectname[0],
-                        length: indices_objectname[1] - indices_objectname[0],
-                        typeIndex: this.legend.tokenTypes.indexOf('keyword'),
-                        modifierIndex: 0
-                    });
-                }
+    tokenize_line (line: string): CustomToken[] {
+        let highlight_tokens: CustomToken[] = [];
+        const token_re = /\S+/g;
+
+        const tokens = [...line.matchAll(token_re)];
+        if (tokens.length > 0) {
+            if (this.special_objects.has(tokens[0][0])) {
+                highlight_tokens.push({
+                    char: tokens[0].index || 0,
+                    length: tokens[0][0].length,
+                    typeIndex: this.legend.tokenTypes.indexOf('keyword'),
+                    modifierIndex: 0
+                });
             }
         }
-        return tokens;
+
+        return highlight_tokens;
     }
 
 
