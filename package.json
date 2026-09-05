@@ -48,6 +48,11 @@
         "command": "digistar.indentLine",
         "key": "tab",
         "when": "editorTextFocus && editorLangId == digistar && !suggestWidgetVisible"
+      },
+      {
+        "command": "digistar.indentLineAndEnter",
+        "key": "enter",
+        "when": "editorTextFocus && editorLangId == digistar && !suggestWidgetVisible"
       }
     ]
   },

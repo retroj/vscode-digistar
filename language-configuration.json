@@ -8,5 +8,11 @@
        { "open": "(", "close": ")" },
        { "open": "'", "close": "'", "notIn": ["string", "comment"] },
        { "open": "\"", "close": "\"", "notIn": ["string"] }
+    ],
+    "onEnterRules": [
+       {
+        "beforeText": ".*",
+        "action": { "indent": "outdent", "appendText": "\t" }
+       }
     ]
 }

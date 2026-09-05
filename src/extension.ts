@@ -1,6 +1,6 @@
 
 import * as vscode from 'vscode';
-import { command_digistarScriptIndentLine } from './indentation';
+import * as commands from './commands';
 
 
 interface CustomToken {
@@ -182,7 +182,9 @@ export function activate (context: vscode.ExtensionContext) {
     // Commands
     //
     context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.indentLine', command_digistarScriptIndentLine));
+        vscode.commands.registerCommand('digistar.indentLine', commands.command_digistarScriptIndentLine));
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digistar.indentLineAndEnter', commands.command_digistarIndentLineAndEnter));
 
     // Configuration defaults can be ignored when a window is initially opened and the extension
     // has not yet been activated.  This is a workaround to enforce our default tabSize or the
