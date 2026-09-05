@@ -39,8 +39,15 @@
     },
     "commands": [
       {
-        "command": "digistar.helloWorld",
-        "title": "Hello World"
+        "command": "digistar.indentLine",
+        "title": "Digistar Script Indent Line"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "digistar.indentLine",
+        "key": "tab",
+        "when": "editorTextFocus && editorLangId == digistar && !suggestWidgetVisible"
       }
     ]
   },
