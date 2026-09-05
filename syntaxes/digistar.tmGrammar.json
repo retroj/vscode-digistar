@@ -5,7 +5,8 @@
     { "include": "#comments" },
     { "include": "#timestamps" },
     { "include": "#durations" },
-    { "include": "#strings" }
+    { "include": "#strings" },
+    { "include": "#classes" }
   ],
   "repository": {
     "errors": {
@@ -43,6 +44,14 @@
         {
           "name": "constant.character.escape.digistar",
           "match": "\\\\."
+        }
+      ]
+    },
+    "classes": {
+      "patterns": [
+        {
+          "name": "support.class.digistar",
+          "match": "\\b(asterismData|asterismGroupPrefs|asterismPreferences|asteroid|asteroidGroupPrefs|asteroidPreferences|atmosphere|audio3D|audio|audioInput|aurora|auroraPreferences|autoAlign|autoBlend|blackHole|blackHolePreferences|bodyInfo|button|camera|capture|cityLightsTexture|cityLightsTexturePreferences|cloud|cloudPreferences|comet|cometGroupPrefs|cometPreferences|complexLinePreferences|complexObjectPreferences|composition|compositionLayer|connector|constellationData|constellationGroupPrefs|constellationPreferences|controlInfo|cylinder|daylightSolidModel|daylightSolidModelPreferences|deviceGroup|dials|domeAudio|domeVideo|dot|dotCloud|dotCloudPreferences|dotModel|dotModelPreferences|dotPreferences|drawMode|dsAtlas|dsAtlasPreferences|dsoData|dsoGroupPrefs|dsoPreferences|dsoVolumeData|dsoVolumePreferences|duModel|duModelPreferences|dwarfPlanetGroupPrefs|earthSatelliteData|earthSatellitePreferences|earthSatGroupPrefs|empty|emptyPreferences|ephemeris|exoplanetData|exoplanetGroupPrefs|exosystemData|exosystemGroupPrefs|fileExtensionInfo|flight|galaxy|galaxyPreferences|genericData|gp|gpStats|guide2Preferences|guide3Preferences|guideData|guidePreferences|hipsImagery|host|hostStats|image|interleaveFrames|javaScript|javaScriptInfo|joystick|kinectSensor|kinectUser|kml|kmlControl|layeredElevation|layeredImagery|light|lightPreferences|lineModel|lineModelPreferences|localPlugin|localPluginStats|menuItem|meteorShower|meteorShowerData|meteorShowerGroupPrefs|meteorShowerPreferences|modelTextureSemantics|moonGroupPrefs|mouse|navigation|navigationControls|noiseTexture|objectGroup|orbit|orbiter|particle|path|pickMap|placemark|planet|planetData|planetGroupPrefs|planetPreferences|plugin|pluginStats|projector|projectors|remoteTheater|satellite|satelliteOrbiter|scene|script|scriptInfo|show|sky|skyPreferences|skySurvey|skySurveyPreferences|slider|slideset|slidesetPreferences|solidModel|solidModelPreferences|spacecraftData|spacecraftGroupPrefs|spacecraftPreferences|speak|spheroidScalarField|spheroidVectorField|spiceKernel|ssBodyInfoPreferences|sssbData|star|starData|starfield|starIdGroupPrefs|starInfo|starInfoPreferences|starPreferences|starSystemData|starSystemGroupPrefs|starTexture|starTexturePreferences|stereo|sun|sunPreferences|surface|syncCard|system|systemObjectGroup|systemObjectOff|systemStats|telescope|text2|text2Preferences|text|textPreferences|textureComposition|textureModel|textureModelPreferences|theater|timepieceLine|toastImagery|toggle|trail|tychoStar|tychoStarsPreferences|ui|video|videoInput|virtualStick|volume|volumeModelPreferences|waypoint|WMPlayer|wmsImagery|wmtsImagery|xbox)Class\\b"
         }
       ]
     }
