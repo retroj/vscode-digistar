@@ -1,18 +1,18 @@
 {
-    "comments": {
-        "lineComment": "#"
-    },
-    "autoClosingPairs": [
-       { "open": "{", "close": "}" },
-       { "open": "[", "close": "]" },
-       { "open": "(", "close": ")" },
-       { "open": "'", "close": "'", "notIn": ["string", "comment"] },
-       { "open": "\"", "close": "\"", "notIn": ["string"] }
-    ],
-    "onEnterRules": [
-       {
-        "beforeText": ".*",
-        "action": { "indent": "outdent", "appendText": "\t" }
-       }
-    ]
+  "comments": {
+    "lineComment": "#"
+  },
+  "autoClosingPairs": [
+    { "open": "{", "close": "}" },
+    { "open": "[", "close": "]" },
+    { "open": "(", "close": ")" },
+    { "open": "'", "close": "'", "notIn": ["string", "comment"] },
+    { "open": "\"", "close": "\"", "notIn": ["string"] }
+  ],
+  "onEnterRules": [
+    {
+      "beforeText": ".*",
+      "action": { "indent": "outdent", "appendText": "\t" }
+    }
+  ]
 }
