@@ -18,6 +18,8 @@
     },
     "comments": {
       "patterns": [
+        { "name": "comment.line.versionstamp.digistar",
+          "match": "^#\\s{\\[(?:\\d+\\.)+\\d+\\]}$" },
         { "name": "comment.line.digistar",
           "match": "[#;].*$" }
       ]
