@@ -37,6 +37,21 @@
         "editor.renderWhitespace": "trailing"
       }
     },
+    "configuration": {
+      "title": "Digistar Script",
+      "properties": {
+        "digistar.indentNewLine": {
+          "type": "string",
+          "default": "always",
+          "enum": [
+            "always",
+            "never",
+            "auto"
+          ],
+          "description": "Controls whether a new line is automatically indented when pressing Enter."
+        }
+      }
+    },
     "commands": [
       {
         "command": "digistar.indentLine",

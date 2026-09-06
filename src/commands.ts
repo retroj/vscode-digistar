@@ -26,6 +26,8 @@ export async function command_digistarScriptIndentLine (): Promise<void> {
 }
 
 export async function command_digistarIndentLineAndEnter (): Promise<void> {
+    const config = vscode.workspace.getConfiguration('digistar');
+    const indentNewLine = config.get('indentNewLine');
     await command_digistarScriptIndentLine();
     const editor = vscode.window.activeTextEditor;
     if (! editor) {
@@ -47,5 +49,16 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
             editBuilder.delete(range);
         });
     }
-    await vscode.commands.executeCommand('type', { text: '\n' });
+    let insertText: string;
+    if (indentNewLine == "always") {
+        insertText = '\n\t';
+    } else if (indentNewLine == "never") {
+        insertText = '\n';
+    } else {
+        // "auto"
+        const prevLineText = document.lineAt(selection.active.line).text;
+        const prevLineMatch = /^\S/.exec(prevLineText);
+        insertText = prevLineMatch ? '\n' : '\n\t';
+    }
+    await vscode.commands.executeCommand('type', { text: insertText });
 }

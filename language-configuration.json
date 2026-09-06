@@ -12,7 +12,7 @@
   "onEnterRules": [
     {
       "beforeText": ".*",
-      "action": { "indent": "outdent", "appendText": "\t" }
+      "action": { "indent": "outdent" }
     }
   ]
 }
