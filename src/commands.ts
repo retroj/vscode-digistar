@@ -1,5 +1,7 @@
 
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import { spawn, ChildProcess } from 'child_process';
 
 export async function command_digistarScriptIndentLine (): Promise<void> {
     const editor = vscode.window.activeTextEditor;
@@ -62,4 +64,39 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
         insertText = prevLineMatch ? '\n' : '\n\t';
     }
     await vscode.commands.executeCommand('type', { text: insertText });
+}
+
+
+/**
+ * Finds the first path in a list that exists on the file system.
+ * @param paths Array of file paths to check
+ * @returns The first existing path string, or undefined if none exist
+ */
+function findFirstExistingPath(paths: string[]): string | undefined {
+    return paths.find(filePath => fs.existsSync(filePath));
+}
+
+const digistarExecutablePath = findFirstExistingPath([
+    "C:/CXSoftware/Apps/Digistar/Bin/UI/Digistar.exe",
+    "C:/D7Software/Apps/Digistar/Bin/UI/Digistar.exe",
+    "C:/D7Software/Bin/GUI/Digistar.exe",
+    "C:/D6Software/Bin/GUI/Digistar.exe",
+    "C:/D5Software/Bin/GUI/Digistar.exe"]);
+
+
+export async function command_digistarPlayScript (): Promise<void> {
+    const editor = vscode.window.activeTextEditor;
+    if (! editor) {
+        return;
+    }
+    if (! digistarExecutablePath) {
+        vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
+        return;
+    }
+    const filePath: string = editor.document.uri.fsPath;
+    const child: ChildProcess = spawn(digistarExecutablePath, ['-p', filePath], {
+        detached: true,
+        stdio: 'ignore'
+    });
+    child.unref();
 }

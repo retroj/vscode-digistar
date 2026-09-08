@@ -185,6 +185,9 @@ export function activate (context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('digistar.indentLine', commands.command_digistarScriptIndentLine));
     context.subscriptions.push(
         vscode.commands.registerCommand('digistar.indentLineAndEnter', commands.command_digistarIndentLineAndEnter));
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digistar.playScript', commands.command_digistarPlayScript));
+
 
     // Configuration defaults can be ignored when a window is initially opened and the extension
     // has not yet been activated.  This is a workaround to enforce our default tabSize or the

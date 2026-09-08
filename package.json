@@ -56,6 +56,11 @@
       {
         "command": "digistar.indentLine",
         "title": "Digistar Script Indent Line"
+      },
+      {
+        "command": "digistar.playScript",
+        "title": "Digistar Script Play",
+        "icon": "$(play)"
       }
     ],
     "keybindings": [
@@ -69,7 +74,16 @@
         "key": "enter",
         "when": "editorTextFocus && editorLangId == digistar && !suggestWidgetVisible"
       }
-    ]
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "digistar.playScript",
+          "group": "navigation",
+          "when": "editorLangId == digistar"
+        }
+      ]
+    }
   },
   "main": "./out/extension.js",
   "scripts": {
