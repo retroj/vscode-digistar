@@ -35,7 +35,13 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
 ### Commands and Key Bindings
 
  - tab: indent line (timestamp at column 0, command at 1 tab)
- - enter: auto-indent and whitespace cleanup
+ - enter: auto-indent and whitespace cleanup (configurable)
+
+### Buttons
+#### editor/title
+
+ - Play Script
+ - FadeStopReset
 
 ### Development
 
