@@ -17,11 +17,12 @@ export async function command_digistarScriptIndentLine (): Promise<void> {
         const ts = match[1];
         const rest = match[2];
         const replacement = ts + '\t' + rest;
-
-        await editor.edit(editBuilder => {
-            const range = document.lineAt(selection.active.line).range;
-            editBuilder.replace(range, replacement);
-        });
+        if (replacement !== lineText) {
+            await editor.edit(editBuilder => {
+                const range = document.lineAt(selection.active.line).range;
+                editBuilder.replace(range, replacement);
+            });
+        }
     }
 }
 
