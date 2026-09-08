@@ -83,20 +83,42 @@ const digistarExecutablePath = findFirstExistingPath([
     "C:/D6Software/Bin/GUI/Digistar.exe",
     "C:/D5Software/Bin/GUI/Digistar.exe"]);
 
+async function digistarPlayScript (filePath: string): Promise<void> {
+    if (! digistarExecutablePath) {
+        vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
+        return;
+    }
+    const child: ChildProcess = spawn(digistarExecutablePath, ['-p', filePath], {
+        detached: true,
+        stdio: 'ignore'
+    });
+    child.unref();
+}
 
 export async function command_digistarPlayScript (): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (! editor) {
         return;
     }
-    if (! digistarExecutablePath) {
-        vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
-        return;
-    }
-    const filePath: string = editor.document.uri.fsPath;
-    const child: ChildProcess = spawn(digistarExecutablePath, ['-p', filePath], {
-        detached: true,
-        stdio: 'ignore'
-    });
-    child.unref();
+    await digistarPlayScript(editor.document.uri.fsPath);
+}
+
+let vscode_digistar_extensionUri: vscode.Uri;
+
+export async function command_digistarFadeStopReset (): Promise<void> {
+    const fadestopreset_ds_path = vscode.Uri.joinPath(vscode_digistar_extensionUri, 'resources',
+        'scripts', 'fadestopreset.ds').fsPath;
+    await digistarPlayScript(fadestopreset_ds_path);
+}
+
+export function activate_commands (context: vscode.ExtensionContext) {
+    vscode_digistar_extensionUri = context.extensionUri;
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digistar.indentLine', command_digistarScriptIndentLine));
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digistar.indentLineAndEnter', command_digistarIndentLineAndEnter));
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digistar.playScript', command_digistarPlayScript));
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digistar.fadestopreset', command_digistarFadeStopReset));
 }

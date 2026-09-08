@@ -61,6 +61,11 @@
         "command": "digistar.playScript",
         "title": "Digistar Script Play",
         "icon": "$(play)"
+      },
+      {
+        "command": "digistar.fadestopreset",
+        "title": "Digistar FadeStopReset",
+        "icon": "$(sync)"
       }
     ],
     "keybindings": [
@@ -79,7 +84,12 @@
       "editor/title": [
         {
           "command": "digistar.playScript",
-          "group": "navigation",
+          "group": "navigation@1",
+          "when": "editorLangId == digistar"
+        },
+        {
+          "command": "digistar.fadestopreset",
+          "group": "navigation@2",
           "when": "editorLangId == digistar"
         }
       ]
@@ -97,7 +107,8 @@
     "language-configuration.json",
     "syntaxes/digistar.tmGrammar.json",
     "out/extension.js",
-    "out/commands.js"
+    "out/commands.js",
+    "resources/scripts/fadestopreset.ds"
   ],
   "devDependencies": {
     "@types/node": "^26.3.0",

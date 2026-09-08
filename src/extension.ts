@@ -181,12 +181,7 @@ export function activate (context: vscode.ExtensionContext) {
 
     // Commands
     //
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.indentLine', commands.command_digistarScriptIndentLine));
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.indentLineAndEnter', commands.command_digistarIndentLineAndEnter));
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.playScript', commands.command_digistarPlayScript));
+    commands.activate_commands(context);
 
 
     // Configuration defaults can be ignored when a window is initially opened and the extension
