@@ -34,7 +34,8 @@
         "editor.tabSize": 12,
         "editor.insertSpaces": false,
         "editor.detectIndentation": false,
-        "editor.renderWhitespace": "trailing"
+        "editor.renderWhitespace": "trailing",
+        "editor.wordBasedSuggestions": "matchingDocuments"
       }
     },
     "configuration": {

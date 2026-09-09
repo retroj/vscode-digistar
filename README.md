@@ -26,6 +26,7 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
  - tabSize 12.  Accomodates long timestamps.
  - Use tabs instead of spaces when indenting commands.
  - Render trailing whitespace.
+ - Autocomplete words from suggestions in open Digistar scripts.
 
 ### Language Configuration
 
