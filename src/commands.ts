@@ -102,7 +102,6 @@ export async function command_digistarPlayScript (): Promise<void> {
     }
     const re = /^[a-z]:\\(?:d\d|cx)content\\/i;
     const filePath = editor.document.uri.fsPath.replace(re, "$Content\\");
-    console.log(filePath);
     await digistarPlayScript(filePath);
 }
 
