@@ -100,7 +100,10 @@ export async function command_digistarPlayScript (): Promise<void> {
     if (! editor) {
         return;
     }
-    await digistarPlayScript(editor.document.uri.fsPath);
+    const re = /^[a-z]:\\(?:d\d|cx)content\\/i;
+    const filePath = editor.document.uri.fsPath.replace(re, "$Content\\");
+    console.log(filePath);
+    await digistarPlayScript(filePath);
 }
 
 let vscode_digistar_extensionUri: vscode.Uri;
