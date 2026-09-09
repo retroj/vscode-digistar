@@ -36,6 +36,8 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
 
  - tab: indent line (timestamp at column 0, command at 1 tab)
  - enter: auto-indent and whitespace cleanup (configurable)
+ - Ctrl-k Ctrl-p: play script
+ - Ctrl-k Ctrl-r: fadestopreset
 
 ### Buttons
 #### editor/title

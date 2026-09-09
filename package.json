@@ -78,6 +78,16 @@
         "command": "digistar.indentLineAndEnter",
         "key": "enter",
         "when": "editorTextFocus && editorLangId == digistar && !suggestWidgetVisible"
+      },
+      {
+        "command": "digistar.playScript",
+        "key": "Ctrl-k Ctrl-p",
+        "when": "editorTextFocus && editorLangId == digistar"
+      },
+      {
+        "command": "digistar.fadestopreset",
+        "key": "Ctrl-k Ctrl-r",
+        "when": "editorTextFocus && editorLangId == digistar"
       }
     ],
     "menus": {
