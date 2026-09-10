@@ -112,6 +112,23 @@ export async function command_digistarFadeStopReset (): Promise<void> {
     await digistarPlayScript(fadestopreset_ds_path);
 }
 
+export async function command_toggleLisInExplorer (): Promise<void> {
+    const config = vscode.workspace.getConfiguration('files');
+    const excludeConfig = config.inspect<Record<string, boolean>>('exclude');
+    const logPattern = '**/*.lis';
+    
+    // Fallback to current global/workspace resolved value, or default to true since we want it hidden first
+    const currentExcludes = { ...excludeConfig?.workspaceValue, ...excludeConfig?.globalValue };
+    const isCurrentlyHidden = currentExcludes[logPattern] !== false; 
+    const shouldHide = !isCurrentlyHidden; // Toggle the value
+    await config.update('exclude', { 
+        ...excludeConfig?.globalValue, 
+        [logPattern]: shouldHide 
+    }, vscode.ConfigurationTarget.Global);
+    vscode.window.showInformationMessage(
+        `Log files are now ${shouldHide ? 'hidden' : 'visible'} in the Explorer.`);
+}
+
 export function activate_commands (context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand('digistar.indentLine', command_digistarScriptIndentLine));
@@ -121,4 +138,6 @@ export function activate_commands (context: vscode.ExtensionContext) {
         vscode.commands.registerCommand('digistar.playScript', command_digistarPlayScript));
     context.subscriptions.push(
         vscode.commands.registerCommand('digistar.fadestopreset', command_digistarFadeStopReset));
+    context.subscriptions.push(
+        vscode.commands.registerCommand('digistar.toggleLisInExplorer', command_toggleLisInExplorer));
 }

@@ -50,6 +50,7 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
 #### Explorer
 
  - .ds files context menu: Play Script
+ - Explorer workspace hamburg menu: toggle visibility of *.lis files
 
 ### Development
 

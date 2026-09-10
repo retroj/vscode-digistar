@@ -70,6 +70,10 @@
         "command": "digistar.fadestopreset",
         "title": "Digistar FadeStopReset",
         "icon": "$(sync)"
+      },
+      {
+        "command": "digistar.toggleLisInExplorer",
+        "title": "Toggle *.lis in Explorer"
       }
     ],
     "keybindings": [
@@ -112,6 +116,13 @@
           "command": "digistar.playScript",
           "group": "navigation",
           "when": "explorerResourceIsFolder == false && resourceExtname == .ds"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "digistar.toggleLisInExplorer",
+          "when": "view == workbench.explorer.fileView",
+          "group": "modification"
         }
       ]
     }
