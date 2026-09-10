@@ -36,6 +36,9 @@
         "editor.detectIndentation": false,
         "editor.renderWhitespace": "trailing",
         "editor.wordBasedSuggestions": "matchingDocuments"
+      },
+      "files.exclude": {
+        "**/*.lis": true
       }
     },
     "configuration": {
