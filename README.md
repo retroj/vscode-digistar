@@ -27,6 +27,7 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
  - Use tabs instead of spaces when indenting commands.
  - Render trailing whitespace.
  - Autocomplete words from suggestions in open Digistar scripts.
+ - Exclude *.lis from Explorer view
 
 ### Language Configuration
 
