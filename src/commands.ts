@@ -114,6 +114,7 @@ export async function command_digistarPlayScript (): Promise<void> {
     }
     const re = /^[a-z]:\\(?:d\d|cx)content\\/i;
     const filePath = editor.document.uri.fsPath.replace(re, "$Content\\");
+    vscode.window.showInformationMessage(`Called Digistar.exe on ${filePath}`);
     await digistarPlayScript(filePath);
 }
 
@@ -122,6 +123,7 @@ let vscode_digistar_extensionUri: vscode.Uri;
 export async function command_digistarFadeStopReset (): Promise<void> {
     const fadestopreset_ds_path = vscode.Uri.joinPath(vscode_digistar_extensionUri, 'resources',
         'scripts', 'fadestopreset.ds').fsPath;
+    vscode.window.showInformationMessage('Digistar fadeStopReset');
     await digistarPlayScript(fadestopreset_ds_path);
 }
 
