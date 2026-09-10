@@ -46,6 +46,10 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
  - Play Script
  - FadeStopReset
 
+#### Explorer
+
+ - .ds files context menu: Play Script
+
 ### Development
 
  - Support for VS Code's debug build system.
