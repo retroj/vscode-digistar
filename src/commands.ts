@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
 
-export async function command_digistarScriptIndentLine (): Promise<void> {
+export async function command_digistarScriptIndentLine (leaving: boolean = false): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (! editor) {
         return;
@@ -22,18 +22,24 @@ export async function command_digistarScriptIndentLine (): Promise<void> {
         //    start of the rest.
         const ts_end = match[1].length + ts.length;
         const rest_begin = ts_end + match[3].length;
+        let old_char_position = selection.active.character;
         let new_char_position = selection.active.character;
-        if (selection.active.character >= rest_begin) {
+        if (old_char_position >= rest_begin) {
             const leading_chars_removed = rest_begin - (ts.length + 1);
             new_char_position -= leading_chars_removed;
-        } else if (selection.active.character >= ts_end) {
+        } else if (old_char_position >= ts_end) {
             new_char_position = ts.length + 1;
         }
-        if (new_char_position != selection.active.character) {
+        let maybe_tab = '\t';
+        if (leaving && new_char_position == ts.length + 1) {
+            new_char_position -= 1;
+            maybe_tab = '';
+        }
+        if (new_char_position != old_char_position) {
             const newPosition = new vscode.Position(selection.active.line, new_char_position);
             editor.selection = new vscode.Selection(newPosition, newPosition);
         }
-        const replacement = ts + '\t' + rest;
+        const replacement = ts + maybe_tab + rest;
         if (replacement !== lineText) {
             await editor.edit(editBuilder => {
                 const range = document.lineAt(selection.active.line).range;
@@ -46,7 +52,7 @@ export async function command_digistarScriptIndentLine (): Promise<void> {
 export async function command_digistarIndentLineAndEnter (): Promise<void> {
     const config = vscode.workspace.getConfiguration('digistar');
     const indentNewLine = config.get('indentNewLine');
-    await command_digistarScriptIndentLine();
+    await command_digistarScriptIndentLine(true);
     const editor = vscode.window.activeTextEditor;
     if (! editor) {
         return;
