@@ -1,7 +1,8 @@
 
 import * as vscode from 'vscode';
-import * as fs from 'fs';
 import { spawn, ChildProcess } from 'child_process';
+
+import * as env from './environment';
 
 export async function command_digistarScriptIndentLine (leaving: boolean = false): Promise<void> {
     const editor = vscode.window.activeTextEditor;
@@ -78,29 +79,12 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
     await vscode.commands.executeCommand('type', { text: insertText });
 }
 
-
-/**
- * Finds the first path in a list that exists on the file system.
- * @param paths Array of file paths to check
- * @returns The first existing path string, or undefined if none exist
- */
-function findFirstExistingPath(paths: string[]): string | undefined {
-    return paths.find(filePath => fs.existsSync(filePath));
-}
-
-const digistarExecutablePath = findFirstExistingPath([
-    "C:/CXSoftware/Apps/Digistar/Bin/UI/Digistar.exe",
-    "C:/D7Software/Apps/Digistar/Bin/UI/Digistar.exe",
-    "C:/D7Software/Bin/GUI/Digistar.exe",
-    "C:/D6Software/Bin/GUI/Digistar.exe",
-    "C:/D5Software/Bin/GUI/Digistar.exe"]);
-
 async function digistarPlayScript (filePath: string): Promise<void> {
-    if (! digistarExecutablePath) {
+    if (! env.digistarExecutablePath) {
         vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
         return;
     }
-    const child: ChildProcess = spawn(digistarExecutablePath, ['-p', filePath], {
+    const child: ChildProcess = spawn(env.digistarExecutablePath, ['-p', filePath], {
         detached: true,
         stdio: 'ignore'
     });
@@ -121,17 +105,14 @@ export async function command_digistarPlayScript (uri: vscode.Uri|null): Promise
     await digistarPlayScript(filePath);
 }
 
-let vscode_digistar_extensionUri: vscode.Uri;
-
 export async function command_digistarFadeStopReset (): Promise<void> {
-    const fadestopreset_ds_path = vscode.Uri.joinPath(vscode_digistar_extensionUri, 'resources',
+    const fadestopreset_ds_path = vscode.Uri.joinPath(env.vscode_digistar_extensionUri, 'resources',
         'scripts', 'fadestopreset.ds').fsPath;
     vscode.window.showInformationMessage('Digistar fadeStopReset');
     await digistarPlayScript(fadestopreset_ds_path);
 }
 
 export function activate_commands (context: vscode.ExtensionContext) {
-    vscode_digistar_extensionUri = context.extensionUri;
     context.subscriptions.push(
         vscode.commands.registerCommand('digistar.indentLine', command_digistarScriptIndentLine));
     context.subscriptions.push(

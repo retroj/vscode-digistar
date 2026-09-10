@@ -125,7 +125,10 @@
     "language-configuration.json",
     "syntaxes/digistar.tmGrammar.json",
     "out/extension.js",
+    "out/environment.js",
     "out/commands.js",
+    "out/highlighter.js",
+    "out/utils.js",
     "resources/scripts/fadestopreset.ds"
   ],
   "devDependencies": {
