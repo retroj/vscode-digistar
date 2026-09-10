@@ -103,6 +103,13 @@
           "group": "navigation@2",
           "when": "editorLangId == digistar"
         }
+      ],
+      "explorer/context": [
+        {
+          "command": "digistar.playScript",
+          "group": "navigation",
+          "when": "explorerResourceIsFolder == false && resourceExtname == .ds"
+        }
       ]
     }
   },

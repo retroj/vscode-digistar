@@ -107,13 +107,16 @@ async function digistarPlayScript (filePath: string): Promise<void> {
     child.unref();
 }
 
-export async function command_digistarPlayScript (): Promise<void> {
-    const editor = vscode.window.activeTextEditor;
-    if (! editor) {
-        return;
+export async function command_digistarPlayScript (uri: vscode.Uri|null): Promise<void> {
+    if (! uri) {
+        const editor = vscode.window.activeTextEditor;
+        if (! editor) {
+            return;
+        }
+        uri = editor.document.uri;
     }
     const re = /^[a-z]:\\(?:d\d|cx)content\\/i;
-    const filePath = editor.document.uri.fsPath.replace(re, "$Content\\");
+    const filePath = uri.fsPath.replace(re, "$Content\\");
     vscode.window.showInformationMessage(`Called Digistar.exe on ${filePath}`);
     await digistarPlayScript(filePath);
 }
