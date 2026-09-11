@@ -79,15 +79,16 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
     await vscode.commands.executeCommand('type', { text: insertText });
 }
 
-async function digistarPlayScript (filePath: string): Promise<void> {
+async function digistarPlayScript (filePath: string): Promise<boolean> {
     if (! env.digistarExecutablePath) {
         vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
-        return;
+        return false;
     }
     spawn(env.digistarExecutablePath, ['-p', filePath], {
         detached: true,
         stdio: 'ignore'
     }).unref();
+    return true;
 }
 
 export async function command_digistarPlayScript (uri: vscode.Uri|null): Promise<void> {
@@ -100,15 +101,17 @@ export async function command_digistarPlayScript (uri: vscode.Uri|null): Promise
     }
     const re = /^[a-z]:\\(?:d\d|cx)content\\/i;
     const filePath = uri.fsPath.replace(re, "$Content\\");
-    vscode.window.showInformationMessage(`Called Digistar.exe on ${filePath}`);
-    await digistarPlayScript(filePath);
+    if (await digistarPlayScript(filePath)) {
+        vscode.window.showInformationMessage(`Called Digistar.exe on ${filePath}`);
+    }
 }
 
 export async function command_digistarFadeStopReset (): Promise<void> {
     const fadestopreset_ds_path = vscode.Uri.joinPath(env.vscode_digistar_extensionUri, 'resources',
         'scripts', 'fadestopreset.ds').fsPath;
-    vscode.window.showInformationMessage('Digistar fadeStopReset');
-    await digistarPlayScript(fadestopreset_ds_path);
+    if (await digistarPlayScript(fadestopreset_ds_path)) {
+        vscode.window.showInformationMessage('Digistar fadeStopReset');
+    }
 }
 
 export async function command_toggleLisInExplorer (): Promise<void> {
