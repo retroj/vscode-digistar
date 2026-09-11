@@ -117,11 +117,11 @@ export async function command_toggleLisInExplorer (): Promise<void> {
     const excludeConfig = config.inspect<Record<string, boolean>>('exclude');
     const excludePattern = '**/*.lis';
     const currentExcludes = { ...excludeConfig?.globalValue, ...excludeConfig?.workspaceValue };
-    const isCurrentlyHidden = currentExcludes[excludePattern] !== false; 
+    const isCurrentlyHidden = currentExcludes[excludePattern] !== false;
     const shouldHide = !isCurrentlyHidden; // Toggle the value
-    await config.update('exclude', { 
-        ...excludeConfig?.workspaceValue, 
-        [excludePattern]: shouldHide 
+    await config.update('exclude', {
+        ...excludeConfig?.workspaceValue,
+        [excludePattern]: shouldHide
     }, vscode.ConfigurationTarget.Workspace);
     vscode.window.showInformationMessage(
         `Lis files are now ${shouldHide ? 'hidden' : 'visible'} in the Explorer.`);

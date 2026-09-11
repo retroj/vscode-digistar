@@ -142,7 +142,7 @@ implements vscode.DocumentSemanticTokensProvider
         if (this.debounceTimer) {
             clearTimeout(this.debounceTimer);
         }
-        
+
         this.debounceTimer = setTimeout(() => {
             this.refresh();
         }, 150); 
