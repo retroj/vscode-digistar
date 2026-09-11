@@ -130,14 +130,14 @@ export async function command_toggleLisInExplorer (): Promise<void> {
 }
 
 export function activate_commands (context: vscode.ExtensionContext) {
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.indentLine', command_digistarScriptIndentLine));
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.indentLineAndEnter', command_digistarIndentLineAndEnter));
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.playScript', command_digistarPlayScript));
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.fadestopreset', command_digistarFadeStopReset));
-    context.subscriptions.push(
-        vscode.commands.registerCommand('digistar.toggleLisInExplorer', command_toggleLisInExplorer));
+    const commands = [
+        ['digistar.indentLine', command_digistarScriptIndentLine],
+        ['digistar.indentLineAndEnter', command_digistarIndentLineAndEnter],
+        ['digistar.playScript', command_digistarPlayScript],
+        ['digistar.fadestopreset', command_digistarFadeStopReset],
+        ['digistar.toggleLisInExplorer', command_toggleLisInExplorer]
+    ] as const;
+    for (let [name, fn] of commands) {
+        context.subscriptions.push(vscode.commands.registerCommand(name, fn));
+    }
 }
