@@ -115,16 +115,14 @@ export async function command_digistarFadeStopReset (): Promise<void> {
 export async function command_toggleLisInExplorer (): Promise<void> {
     const config = vscode.workspace.getConfiguration('files');
     const excludeConfig = config.inspect<Record<string, boolean>>('exclude');
-    const logPattern = '**/*.lis';
-    
-    // Fallback to current global/workspace resolved value, or default to true since we want it hidden first
-    const currentExcludes = { ...excludeConfig?.workspaceValue, ...excludeConfig?.globalValue };
-    const isCurrentlyHidden = currentExcludes[logPattern] !== false; 
+    const excludePattern = '**/*.lis';
+    const currentExcludes = { ...excludeConfig?.globalValue, ...excludeConfig?.workspaceValue };
+    const isCurrentlyHidden = currentExcludes[excludePattern] !== false; 
     const shouldHide = !isCurrentlyHidden; // Toggle the value
     await config.update('exclude', { 
-        ...excludeConfig?.globalValue, 
-        [logPattern]: shouldHide 
-    }, vscode.ConfigurationTarget.Global);
+        ...excludeConfig?.workspaceValue, 
+        [excludePattern]: shouldHide 
+    }, vscode.ConfigurationTarget.Workspace);
     vscode.window.showInformationMessage(
         `Lis files are now ${shouldHide ? 'hidden' : 'visible'} in the Explorer.`);
 }
