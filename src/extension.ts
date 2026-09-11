@@ -1,7 +1,7 @@
 
 import * as vscode from 'vscode';
 
-import * as env from './environment';
+import * as environment from './environment';
 import * as commands from './commands';
 import { DigistarScriptSemanticHighlighter } from './highlighter';
 
@@ -12,8 +12,8 @@ export function activate (context: vscode.ExtensionContext) {
     console.log(`Digistar Script extension activated`);
 
     semanticHighlighter.activate(context);
-    env.activate_environment(context);
-    commands.activate_commands(context);
+    environment.activate(context);
+    commands.activate(context);
 
     // Configuration defaults can be ignored when a window is initially opened and the extension
     // has not yet been activated.  This is a workaround to enforce our default tabSize or the

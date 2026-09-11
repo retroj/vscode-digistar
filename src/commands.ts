@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import { spawn, ChildProcess } from 'child_process';
 
-import * as env from './environment';
+import * as environment from './environment';
 
 export async function command_digistarScriptIndentLine (leaving: boolean = false): Promise<void> {
     const editor = vscode.window.activeTextEditor;
@@ -80,11 +80,11 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
 }
 
 async function digistarPlayScript (filePath: string): Promise<boolean> {
-    if (! env.digistarExecutablePath) {
+    if (! environment.digistarExecutablePath) {
         vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
         return false;
     }
-    spawn(env.digistarExecutablePath, ['-p', filePath], {
+    spawn(environment.digistarExecutablePath, ['-p', filePath], {
         detached: true,
         stdio: 'ignore'
     }).unref();
@@ -107,7 +107,7 @@ export async function command_digistarPlayScript (uri: vscode.Uri|null): Promise
 }
 
 export async function command_digistarFadeStopReset (): Promise<void> {
-    const fadestopreset_ds_path = vscode.Uri.joinPath(env.vscode_digistar_extensionUri, 'resources',
+    const fadestopreset_ds_path = vscode.Uri.joinPath(environment.vscode_digistar_extensionUri, 'resources',
         'scripts', 'fadestopreset.ds').fsPath;
     if (await digistarPlayScript(fadestopreset_ds_path)) {
         vscode.window.showInformationMessage('Digistar fadeStopReset');
@@ -129,7 +129,7 @@ export async function command_toggleLisInExplorer (): Promise<void> {
         `Lis files are now ${shouldHide ? 'hidden' : 'visible'} in the Explorer.`);
 }
 
-export function activate_commands (context: vscode.ExtensionContext) {
+export function activate (context: vscode.ExtensionContext) {
     const commands = [
         ['digistar.indentLine', command_digistarScriptIndentLine],
         ['digistar.indentLineAndEnter', command_digistarIndentLineAndEnter],

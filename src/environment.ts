@@ -12,6 +12,6 @@ export const digistarExecutablePath = utils.findFirstExistingPath([
     "C:/D6Software/Bin/GUI/Digistar.exe",
     "C:/D5Software/Bin/GUI/Digistar.exe"]);
 
-export function activate_environment (context: vscode.ExtensionContext) {
+export function activate (context: vscode.ExtensionContext) {
     vscode_digistar_extensionUri = context.extensionUri;
 }
