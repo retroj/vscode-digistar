@@ -84,11 +84,10 @@ async function digistarPlayScript (filePath: string): Promise<void> {
         vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
         return;
     }
-    const child: ChildProcess = spawn(env.digistarExecutablePath, ['-p', filePath], {
+    spawn(env.digistarExecutablePath, ['-p', filePath], {
         detached: true,
         stdio: 'ignore'
-    });
-    child.unref();
+    }).unref();
 }
 
 export async function command_digistarPlayScript (uri: vscode.Uri|null): Promise<void> {
