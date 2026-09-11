@@ -126,7 +126,7 @@ export async function command_toggleLisInExplorer (): Promise<void> {
         [logPattern]: shouldHide 
     }, vscode.ConfigurationTarget.Global);
     vscode.window.showInformationMessage(
-        `Log files are now ${shouldHide ? 'hidden' : 'visible'} in the Explorer.`);
+        `Lis files are now ${shouldHide ? 'hidden' : 'visible'} in the Explorer.`);
 }
 
 export function activate_commands (context: vscode.ExtensionContext) {
