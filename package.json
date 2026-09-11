@@ -73,7 +73,7 @@
       },
       {
         "command": "digistar.toggleLisInExplorer",
-        "title": "Toggle *.lis in Explorer"
+        "title": "Toggle Digistar *.lis in Explorer"
       }
     ],
     "keybindings": [
