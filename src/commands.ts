@@ -4,7 +4,7 @@ import { spawn, ChildProcess } from 'child_process';
 
 import * as environment from './environment';
 
-export async function command_digistarScriptIndentLine (leaving: boolean = false): Promise<void> {
+export async function command_digistarScriptIndentLine (): Promise<void> {
     const editor = vscode.window.activeTextEditor;
     if (! editor) {
         return;
@@ -23,7 +23,7 @@ export async function command_digistarScriptIndentLine (leaving: boolean = false
         //    start of the rest.
         const ts_end = match[1].length + ts.length;
         const rest_begin = ts_end + match[3].length;
-        let old_char_position = selection.active.character;
+        const old_char_position = selection.active.character;
         let new_char_position = selection.active.character;
         if (old_char_position >= rest_begin) {
             const leading_chars_removed = rest_begin - (ts.length + 1);
@@ -31,16 +31,11 @@ export async function command_digistarScriptIndentLine (leaving: boolean = false
         } else if (old_char_position >= ts_end) {
             new_char_position = ts.length + 1;
         }
-        let maybe_tab = '\t';
-        if (leaving && new_char_position == ts.length + 1) {
-            new_char_position -= 1;
-            maybe_tab = '';
-        }
         if (new_char_position != old_char_position) {
             const newPosition = new vscode.Position(selection.active.line, new_char_position);
             editor.selection = new vscode.Selection(newPosition, newPosition);
         }
-        const replacement = ts + maybe_tab + rest;
+        const replacement = ts + '\t' + rest;
         if (replacement !== lineText) {
             await editor.edit(editBuilder => {
                 const range = document.lineAt(selection.active.line).range;
@@ -51,32 +46,38 @@ export async function command_digistarScriptIndentLine (leaving: boolean = false
 }
 
 export async function command_digistarIndentLineAndEnter (): Promise<void> {
-    const config = vscode.workspace.getConfiguration('digistar');
-    const indentNewLine = config.get('indentNewLine');
-    await command_digistarScriptIndentLine(true);
     const editor = vscode.window.activeTextEditor;
     if (! editor) {
         return;
     }
     const document = editor.document;
+    const eol = document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
     const selection = editor.selection;
-    const lineText = document.lineAt(selection.active.line).text;
-    const match = lineText.match(/^\s*[0-9+:.]*\s*/);
-    let insertText: string;
-    // if we are looking at a tab or a timestamp, do not insert a tab
-    if ((match && selection.active.character < match[0].length) ||
-        indentNewLine == "never")
-    {
-        insertText = '\n';
-    } else if (indentNewLine == "always") {
-        insertText = '\n\t';
-    } else {
-        // "auto"
-        const prevLineText = document.lineAt(selection.active.line).text;
-        const prevLineMatch = /^\S/.exec(prevLineText);
-        insertText = prevLineMatch ? '\n' : '\n\t';
+    const old_char_position = selection.active.character;
+    const line = document.lineAt(selection.active.line);
+    const range = line.range;
+    const prevLine = line.text.substring(0, old_char_position);
+    const newLine = line.text.substring(old_char_position, line.text.length);
+    const ts_match = line.text.match(/^(\s*?[0-9+:.]*)\s*/);
+    const match = prevLine.match(/^(\s*?)([0-9+:.]*)(\s*)(.*?)\s*$/);
+    if (match && ts_match) { // always true
+        const ts = match[2];
+        const rest = match[4];
+        const ts_end = ts_match[1].length;
+        const prevLineTab = rest ? '\t' : '';
+        // if the cursor is before the end of the timestamp, do not insert a tab on the new line.
+        //XXX whitespace before the timestamp causes a failure of this rule.
+        const newLineTab = selection.active.character >= ts_end ? '\t' : '';
+        const replacement = ts + prevLineTab + rest + eol + newLineTab + newLine.trimStart();
+        await editor.edit(editBuilder => {
+            editBuilder.replace(range, replacement);
+        });
+        // Cursor Motion:
+        //  - if the cursor is before the rest, and there is a rest, newchar = 0, otherwise 1.
+        const newChar = selection.active.character < ts_match[0].length ? 0 : 1;
+        const newPosition = new vscode.Position(selection.active.line + 1, newChar);
+        editor.selection = new vscode.Selection(newPosition, newPosition);
     }
-    await vscode.commands.executeCommand('type', { text: insertText });
 }
 
 async function digistarPlayScript (filePath: string): Promise<boolean> {
