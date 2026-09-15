@@ -12,7 +12,7 @@ export async function command_digistarScriptIndentLine (): Promise<void> {
     const document = editor.document;
     const selection = editor.selection;
     const lineText = document.lineAt(selection.active.line).text;
-    const match = lineText.match(/^(\s*?)([0-9+:.]*)(\s*)(.*?)\s*$/);
+    const match = lineText.match(/^(\s*)([0-9+:.]*)(\s*)(.*?)\s*$/);
     if (match) {
         const ts = match[2];
         const rest = match[4];
