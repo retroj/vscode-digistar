@@ -1,6 +1,6 @@
 
 import * as vscode from 'vscode';
-import { spawn, ChildProcess } from 'child_process';
+import { spawn } from 'child_process';
 
 import * as environment from './environment';
 
