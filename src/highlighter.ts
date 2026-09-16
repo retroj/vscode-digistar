@@ -30,13 +30,16 @@ implements vscode.DocumentSemanticTokensProvider
     */
     tokenize_line (line: string): CustomToken[] {
         let highlight_tokens: CustomToken[] = [];
+        const leading_re = /^[0-9:.+\s]*/;
+        const leading_match = line.match(leading_re);
+        const leading = leading_match ? leading_match[0].length : 0;
         const token_re = /\S+/g;
 
-        const tokens = [...line.matchAll(token_re)];
+        const tokens = [...line.substring(leading).matchAll(token_re)];
         if (tokens.length > 0) {
             if (this.special_objects.has(tokens[0][0])) {
                 highlight_tokens.push({
-                    char: tokens[0].index || 0,
+                    char: (tokens[0].index || 0) + leading,
                     length: tokens[0][0].length,
                     typeIndex: this.legend.tokenTypes.indexOf('keyword'),
                     modifierIndex: 0
