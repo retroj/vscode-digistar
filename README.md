@@ -14,6 +14,8 @@ The TextMate grammar syntax provides highlighting for the simplest parts of Digi
  - Timestamps
  - Comments
  - Strings
+ - Pathnames
+ - System class names
  - The "duration" keyword
  - Error lines in .lis files
 
