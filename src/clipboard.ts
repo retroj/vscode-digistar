@@ -29,12 +29,14 @@ export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProv
                                              this.providedPasteEditKinds[0])];
     }
 
-    activate (context: vscode.ExtensionContext) {
+    public static activate (context: vscode.ExtensionContext) {
+        const pasteProvider = new DigistarScriptPasteProvider();
         const selector: vscode.DocumentSelector = { scheme: 'file', language: 'digistar' };
         context.subscriptions.push(vscode.languages.registerDocumentPasteEditProvider(
-            selector, this, {
+            selector, pasteProvider, {
                 providedPasteEditKinds: [vscode.DocumentDropOrPasteEditKind.Text],
                 pasteMimeTypes: ['text/plain']
             }));
+        return pasteProvider;
     }
 }

@@ -151,20 +151,22 @@ implements vscode.DocumentSemanticTokensProvider
         }, 150); 
     }
 
-    activate (context: vscode.ExtensionContext) {
+    public static activate (context: vscode.ExtensionContext) {
+        const semanticHighlighter = new DigistarScriptSemanticHighlighter();
         const selector: vscode.DocumentSelector = { language: 'digistar', scheme: 'file' };
         context.subscriptions.push(
-            vscode.languages.registerDocumentSemanticTokensProvider(selector, this, this.legend));
+            vscode.languages.registerDocumentSemanticTokensProvider(selector, semanticHighlighter, semanticHighlighter.legend));
 
         // Text changes
         //
-        let changeSubscription = vscode.workspace.onDidChangeTextDocument(event => this.onDidChangeTextDocument(event));
+        let changeSubscription = vscode.workspace.onDidChangeTextDocument(event => semanticHighlighter.onDidChangeTextDocument(event));
         context.subscriptions.push(changeSubscription);
 
         // 4. Cleanup memory cache when a text document is closed
         const closeSubscription = vscode.workspace.onDidCloseTextDocument((document: vscode.TextDocument) => {
-            this.tokenCache.delete(document.uri.toString());
+            semanticHighlighter.tokenCache.delete(document.uri.toString());
         });
         context.subscriptions.push(closeSubscription);
+        return semanticHighlighter;
     }
 }
