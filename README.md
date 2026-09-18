@@ -45,6 +45,7 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
 
 ### Paste Provider
 
+ - Configuration option `digistar.pasteResolveAliases`: replace OS style path prefixes of Digistar's software and content directories with the Digistar aliases $Software and $Content. (Default on.)
  - Configuration option `digistar.posixPathSeparators`: auto-convert Windows path separators (\\) to POSIX path separators (/) on when pasting. (Default off.)
 
 ### Buttons
