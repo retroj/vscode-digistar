@@ -3,6 +3,14 @@ import * as vscode from 'vscode';
 
 import * as utils from './utils';
 
+function pasteFormatdigistarResolvePathAliases (line: string): string {
+    return line.replace(/[a-z]:[\\/](?:CX|D\d)(?=Content|Software)/ig, '$');
+}
+
+function pasteFormatPosixPathSeparators (line: string): string {
+    return line.replace(/^([^|#;]*)/, (_, prefix) => prefix.replace(/\\/g, '/'));
+}
+
 export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProvider {
     readonly providedPasteEditKinds = [vscode.DocumentDropOrPasteEditKind.Text];
 
@@ -13,18 +21,29 @@ export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProv
                                      token: vscode.CancellationToken):
           Promise<vscode.DocumentPasteEdit[] | undefined>
     {
-        const text = dataTransfer.get('text/plain')?.value;
+        let text = dataTransfer.get('text/plain')?.value;
         if (! text) {
             return undefined;
         }
-        const eol = document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
-        const lines: string[] = text.split(/\r?\n/);
-        if (utils.digistarExtensionGetConfiguration('posixPathSeparators')) {
-            for (let i = 0; i < lines.length; i++) {
-                lines[i] = lines[i].replace(/^([^|#;]*)/, (_, prefix) => prefix.replace(/\\/g, '/'));
+        let formatters = [
+            { enabled: utils.digistarExtensionGetConfiguration('pasteResolveAliases'),
+              formatter: pasteFormatdigistarResolvePathAliases },
+            { enabled: utils.digistarExtensionGetConfiguration('posixPathSeparators'),
+              formatter: pasteFormatPosixPathSeparators }
+        ];
+        if (formatters.length > 0) {
+            const eol = document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
+            const lines: string[] = text.split(/\r?\n/);
+            for (let formatter of formatters) {
+                for (let i = 0; i < lines.length; i++) {
+                    if (formatter.enabled) {
+                        lines[i] = formatter.formatter(lines[i]);
+                    }
+                }
             }
+            text = lines.join(eol);
         }
-        return [new vscode.DocumentPasteEdit(lines.join(eol),
+        return [new vscode.DocumentPasteEdit(text,
                                              'Indented Digistar Script Paste',
                                              this.providedPasteEditKinds[0])];
     }

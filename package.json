@@ -54,6 +54,11 @@
           ],
           "description": "Controls whether a new line is automatically indented when pressing Enter."
         },
+        "digistar.pasteResolveAliases": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically resolve Digistar path aliases when pasting in Digistar scripts."
+        },
         "digistar.posixPathSeparators": {
           "type": "boolean",
           "default": false,
