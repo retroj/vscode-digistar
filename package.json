@@ -53,6 +53,11 @@
             "auto"
           ],
           "description": "Controls whether a new line is automatically indented when pressing Enter."
+        },
+        "digistar.posixPathSeparators": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically convert Windows path separators (\\) to POSIX path separators (/) when pasting in Digistar scripts."
         }
       }
     },
@@ -125,7 +130,15 @@
           "group": "modification"
         }
       ]
-    }
+    },
+    "documentPasteProviders": [
+      {
+        "languages": ["digistar"],
+          "contents": [
+            { "kind": "text" }
+          ]
+      }
+    ]
   },
   "main": "./out/extension.js",
   "scripts": {

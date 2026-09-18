@@ -43,6 +43,10 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
  - Ctrl-k Ctrl-p: play script
  - Ctrl-k Ctrl-r: fadestopreset
 
+### Paste Provider
+
+ - Configuration option `digistar.posixPathSeparators`: auto-convert Windows path separators (\\) to POSIX path separators (/) on when pasting. (Default off.)
+
 ### Buttons
 #### editor/title
 

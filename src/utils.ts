@@ -1,5 +1,11 @@
 
+import * as vscode from 'vscode';
+
 import * as fs from 'fs';
+
+export function digistarExtensionGetConfiguration (propertyName: string) {
+    return vscode.workspace.getConfiguration('digistar').get(propertyName)
+}
 
 /**
  * Finds the first path in a list that exists on the file system.
