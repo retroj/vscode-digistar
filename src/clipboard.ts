@@ -41,11 +41,12 @@ export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProv
                     }
                 }
             }
-            text = lines.join(eol);
+            return [new vscode.DocumentPasteEdit(lines.join(eol),
+                                                 'Indented Digistar Script Paste',
+                                                 this.providedPasteEditKinds[0])];
+        } else {
+            return undefined;
         }
-        return [new vscode.DocumentPasteEdit(text,
-                                             'Indented Digistar Script Paste',
-                                             this.providedPasteEditKinds[0])];
     }
 
     public static activate (context: vscode.ExtensionContext) {
