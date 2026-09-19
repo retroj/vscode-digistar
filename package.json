@@ -155,6 +155,7 @@
     "out/environment.js",
     "out/commands.js",
     "out/highlighter.js",
+    "out/clipboard.js",
     "out/utils.js",
     "resources/scripts/fadestopreset.ds"
   ],
