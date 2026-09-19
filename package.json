@@ -45,13 +45,8 @@
       "title": "Digistar Script",
       "properties": {
         "digistar.indentNewLine": {
-          "type": "string",
-          "default": "always",
-          "enum": [
-            "always",
-            "never",
-            "auto"
-          ],
+          "type": "boolean",
+          "default": true,
           "description": "Controls whether a new line is automatically indented when pressing Enter."
         },
         "digistar.pasteResolveAliases": {

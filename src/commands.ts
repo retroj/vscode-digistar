@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { spawn } from 'child_process';
 
 import * as environment from './environment';
+import * as utils from './utils';
 
 export async function command_digistarScriptIndentLine (): Promise<void> {
     const editor = vscode.window.activeTextEditor;
@@ -50,11 +51,11 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
     if (! editor) {
         return;
     }
-    const document = editor.document;
-    const eol = document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
+    const indentNewLine = utils.digistarExtensionGetConfiguration('indentNewLine');
+    const eol = editor.document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
     const selection = editor.selection;
     const old_char_position = selection.active.character;
-    const line = document.lineAt(selection.active.line);
+    const line = editor.document.lineAt(selection.active.line);
     const range = line.range;
     const prevLine = line.text.substring(0, old_char_position);
     const newLine = line.text.substring(old_char_position, line.text.length);
@@ -67,7 +68,7 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
         const prevLineTab = rest ? '\t' : '';
         // if the cursor is before the end of the timestamp, do not insert a tab on the new line.
         //XXX whitespace before the timestamp causes a failure of this rule.
-        const newLineTab = selection.active.character >= ts_end ? '\t' : '';
+        const newLineTab = (indentNewLine && selection.active.character >= ts_end) ? '\t' : '';
         const replacement = ts + prevLineTab + rest + eol + newLineTab + newLine.trimStart();
         await editor.edit(editBuilder => {
             editBuilder.replace(range, replacement);
