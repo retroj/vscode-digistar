@@ -11,7 +11,7 @@ function pasteFormatPosixPathSeparators (line: string): string {
     return line.replace(/^([^"|#;]*)/, (_, prefix) => prefix.replace(/\\/g, '/'));
 }
 
-export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProvider {
+export class DigistarScriptPasteEditProvider implements vscode.DocumentPasteEditProvider {
     readonly providedPasteEditKinds = [vscode.DocumentDropOrPasteEditKind.Text];
 
     async provideDocumentPasteEdits (document: vscode.TextDocument,
@@ -50,7 +50,7 @@ export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProv
     }
 
     public static activate (context: vscode.ExtensionContext) {
-        const pasteProvider = new DigistarScriptPasteProvider();
+        const pasteProvider = new DigistarScriptPasteEditProvider();
         const selector: vscode.DocumentSelector = { scheme: 'file', language: 'digistar' };
         context.subscriptions.push(vscode.languages.registerDocumentPasteEditProvider(
             selector, pasteProvider, {
