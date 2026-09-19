@@ -8,7 +8,7 @@ function pasteFormatdigistarResolvePathAliases (line: string): string {
 }
 
 function pasteFormatPosixPathSeparators (line: string): string {
-    return line.replace(/^([^|#;]*)/, (_, prefix) => prefix.replace(/\\/g, '/'));
+    return line.replace(/^([^"|#;]*)/, (_, prefix) => prefix.replace(/\\/g, '/'));
 }
 
 export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProvider {
