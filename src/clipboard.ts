@@ -31,7 +31,7 @@ export class DigistarScriptPasteProvider implements vscode.DocumentPasteEditProv
             { enabled: utils.digistarExtensionGetConfiguration('posixPathSeparators'),
               formatter: pasteFormatPosixPathSeparators }
         ];
-        if (formatters.length > 0) {
+        if (formatters.find(f => f.enabled)) {
             const eol = document.eol === vscode.EndOfLine.CRLF ? '\r\n' : '\n';
             const lines: string[] = text.split(/\r?\n/);
             for (let formatter of formatters) {
