@@ -35,7 +35,9 @@
         "editor.insertSpaces": false,
         "editor.detectIndentation": false,
         "editor.renderWhitespace": "trailing",
-        "editor.wordBasedSuggestions": "matchingDocuments"
+        "editor.wordBasedSuggestions": "matchingDocuments",
+        "editor.formatOnPaste": true,
+        "editor.defaultFormatter": "digistarusersgroup.digistar"
       },
       "files.exclude": {
         "**/*.lis": true
@@ -155,6 +157,7 @@
     "out/environment.js",
     "out/commands.js",
     "out/highlighter.js",
+    "out/formatter.js",
     "out/clipboard.js",
     "out/utils.js",
     "resources/scripts/fadestopreset.ds"
