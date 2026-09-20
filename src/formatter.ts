@@ -19,17 +19,18 @@ export class DigistarScriptRangeFormattingEditProvider
         }
     }
 
-    provideDocumentRangeFormattingEdits (document: vscode.TextDocument,
-                                         range: vscode.Range,
-                                         options: vscode.FormattingOptions,
-                                         token: vscode.CancellationToken):
-        vscode.ProviderResult<vscode.TextEdit[]>
+    formatDocumentRanges (document: vscode.TextDocument,
+                          ranges: readonly vscode.Range[],
+                          token: vscode.CancellationToken): vscode.TextEdit[]
     {
-        console.log("Hello, World! Format on paste!");
         const edits: vscode.TextEdit[] = [];
-        const firstLine = range.start.line;
-        const lastLine = range.end.line;
-        for (let lineNumber = firstLine; lineNumber <= lastLine; lineNumber++) {
+        const lines = new Set<number>();
+        for (let range of ranges) {
+            for (let lineNumber = range.start.line; lineNumber <= range.end.line; lineNumber++) {
+                lines.add(lineNumber);
+            }
+        }
+        for (let lineNumber of [...lines].sort((a, b) => a - b)) {
             if (token.isCancellationRequested) {
                 return [];
             }
@@ -40,6 +41,15 @@ export class DigistarScriptRangeFormattingEditProvider
             }
         }
         return edits;
+    }
+
+    provideDocumentRangeFormattingEdits (document: vscode.TextDocument,
+                                         range: vscode.Range,
+                                         options: vscode.FormattingOptions,
+                                         token: vscode.CancellationToken):
+        vscode.ProviderResult<vscode.TextEdit[]>
+    {
+        return this.formatDocumentRanges(document, [range], token);
     }
 
     public static activate (context: vscode.ExtensionContext) {
