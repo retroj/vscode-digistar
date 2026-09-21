@@ -50,6 +50,29 @@ interface PendingPaste {
     timeout: ReturnType<typeof setTimeout>;
 }
 
+function normalizeLineEndings (text: string): string {
+    return text.replace(/\r\n|\r/g, '\n');
+}
+
+function pasteTextMatches (expected: string, actual: string): boolean {
+    const normalizedExpected = normalizeLineEndings(expected);
+    const normalizedActual = normalizeLineEndings(actual);
+    if (normalizedExpected === normalizedActual) {
+        return true;
+    }
+    const expectedLines = normalizedExpected.split('\n');
+    const actualLines = normalizedActual.split('\n');
+    if (expectedLines.length !== actualLines.length) {
+        return false;
+    }
+    return expectedLines.every((line, index) => {
+        if (line === actualLines[index]) {
+            return true;
+        }
+        return index > 0 && actualLines[index] === `\t${line}`;
+    });
+}
+
 
 /*
  * Formatters
@@ -150,8 +173,14 @@ export class DigistarScriptPasteEditProvider implements vscode.DocumentPasteEdit
         }
 
         const matched = event.contentChanges.map(change => {
-            return pending.changes.find(expected =>
-                expected.range.isEqual(change.range) && expected.text === change.text);
+            const expected = pending.changes.find(expected => expected.range.isEqual(change.range));
+            if (!expected) {
+                return undefined;
+            }
+            if (!pasteTextMatches(expected.text, change.text)) {
+                return undefined;
+            }
+            return expected;
         });
         if (matched.some(change => !change)) {
             return undefined;
