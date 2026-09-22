@@ -161,6 +161,7 @@
     "out/highlighter.js",
     "out/clipboard.js",
     "out/utils.js",
+    "out/lis.js",
     "resources/scripts/fadestopreset.ds"
   ],
   "devDependencies": {

@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 
 import * as environment from './environment';
 import * as commands from './commands';
+import * as lis from './lis';
 import { DigistarScriptSemanticHighlighter } from './highlighter';
 import { DigistarScriptPasteEditProvider } from './clipboard';
 
@@ -14,6 +15,7 @@ export function activate (context: vscode.ExtensionContext) {
     semanticHighlighter = DigistarScriptSemanticHighlighter.activate(context);
     environment.activate(context);
     commands.activate(context);
+    lis.activate(context);
     DigistarScriptPasteEditProvider.activate(context);
 
     // Configuration defaults can be ignored when a window is initially opened and the extension
