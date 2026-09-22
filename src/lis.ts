@@ -52,6 +52,25 @@ async function showLisAnnotations (document: vscode.TextDocument): Promise<boole
     return true;
 }
 
+async function showNewerLisAnnotations (document: vscode.TextDocument): Promise<void> {
+    const lisUri = lisUriForDocument(document);
+    if (!lisUri) {
+        return;
+    }
+
+    try {
+        const [dsStat, lisStat] = await Promise.all([
+            vscode.workspace.fs.stat(document.uri),
+            vscode.workspace.fs.stat(lisUri)
+        ]);
+        if (lisStat.mtime > dsStat.mtime) {
+            await showLisAnnotations(document);
+        }
+    } catch {
+        return;
+    }
+}
+
 
 /*
  * Lis Commands
@@ -99,6 +118,24 @@ export async function command_toggleLisInExplorer (): Promise<void> {
 export function activate (context: vscode.ExtensionContext) {
     lisAnnotations = vscode.languages.createDiagnosticCollection('digistar-lis');
     context.subscriptions.push(lisAnnotations);
+
+    const lisWatcher = vscode.workspace.createFileSystemWatcher('**/*.lis');
+    const showAnnotationsForLis = (lisUri: vscode.Uri): void => {
+        for (const document of vscode.workspace.textDocuments) {
+            if (lisUriForDocument(document)?.toString() === lisUri.toString()) {
+                void showLisAnnotations(document);
+            }
+        }
+    };
+    context.subscriptions.push(
+        lisWatcher,
+        lisWatcher.onDidCreate(showAnnotationsForLis),
+        lisWatcher.onDidChange(showAnnotationsForLis),
+        vscode.workspace.onDidOpenTextDocument(document => {
+            void showNewerLisAnnotations(document);
+        })
+    );
+
     const commands = [
         ['digistar.toggleLisAnnotations', command_digistarToggleLisAnnotations],
         ['digistar.toggleLisInExplorer', command_toggleLisInExplorer]
