@@ -79,6 +79,10 @@
         "icon": "$(sync)"
       },
       {
+        "command": "digistar.toggleLisAnnotations",
+        "title": "Toggle annotations from *.lis files in Digistar Script buffers"
+      },
+      {
         "command": "digistar.toggleLisInExplorer",
         "title": "Toggle Digistar *.lis in Explorer"
       }
