@@ -15,10 +15,3 @@ export function digistarExtensionGetConfiguration (propertyName: string) {
 export function findFirstExistingPath(paths: string[]): string | undefined {
     return paths.find(filePath => fs.existsSync(filePath));
 }
-
-export function lisUriForDocument (document: vscode.TextDocument): vscode.Uri | undefined {
-    if (document.languageId !== 'digistar' || !document.uri.fsPath.toLowerCase().endsWith('.ds')) {
-        return undefined;
-    }
-    return vscode.Uri.file(document.uri.fsPath.replace(/\.ds$/i, '.lis'));
-}
