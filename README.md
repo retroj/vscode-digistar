@@ -42,6 +42,7 @@ The semantic highlighter provides parsing-based highlighting of Digistar command
  - enter: auto-indent and whitespace cleanup (configurable)
  - Ctrl-k Ctrl-p: play script
  - Ctrl-k Ctrl-r: fadestopreset
+ - digistar.toggleLisAnnotations: error annotations from *.lis files
 
 ### Paste Provider
 
