@@ -11,8 +11,8 @@ export function lisUriForDocument (document: vscode.TextDocument): vscode.Uri | 
     return vscode.Uri.file(document.uri.fsPath.replace(/\.ds$/i, '.lis'));
 }
 
-async function showLisAnnotations (editor: vscode.TextEditor): Promise<boolean> {
-    const lisUri = lisUriForDocument(editor.document);
+async function showLisAnnotations (document: vscode.TextDocument): Promise<boolean> {
+    const lisUri = lisUriForDocument(document);
     if (!lisUri) {
         return false;
     }
@@ -36,10 +36,10 @@ async function showLisAnnotations (editor: vscode.TextEditor): Promise<boolean> 
             continue;
         }
         const sourceLine = lisLine - errorCount;
-        if (sourceLine < 0 || sourceLine >= editor.document.lineCount) {
+        if (sourceLine < 0 || sourceLine >= document.lineCount) {
             continue;
         }
-        const sourceText = editor.document.lineAt(sourceLine).text;
+        const sourceText = document.lineAt(sourceLine).text;
         const range = new vscode.Range(sourceLine, 0, sourceLine, sourceText.length);
         diagnostics.push(new vscode.Diagnostic(
             range,
@@ -47,10 +47,15 @@ async function showLisAnnotations (editor: vscode.TextEditor): Promise<boolean> 
             vscode.DiagnosticSeverity.Error
         ));
     }
-    lisAnnotations.set(editor.document.uri, diagnostics);
-    displayedLisAnnotations.add(editor.document.uri.toString());
+    lisAnnotations.set(document.uri, diagnostics);
+    displayedLisAnnotations.add(document.uri.toString());
     return true;
 }
+
+
+/*
+ * Lis Commands
+ */
 
 export async function command_digistarToggleLisAnnotations (): Promise<void> {
     const editor = vscode.window.activeTextEditor;
@@ -64,7 +69,7 @@ export async function command_digistarToggleLisAnnotations (): Promise<void> {
         vscode.window.showInformationMessage('Lis annotations removed.');
         return;
     }
-    if (await showLisAnnotations(editor)) {
+    if (await showLisAnnotations(editor.document)) {
         vscode.window.showInformationMessage('Lis annotations added.');
     } else {
         vscode.window.showInformationMessage('No .lis file was found.');
@@ -85,6 +90,11 @@ export async function command_toggleLisInExplorer (): Promise<void> {
     vscode.window.showInformationMessage(
         `Lis files are now ${shouldHide ? 'hidden' : 'visible'} in the Explorer.`);
 }
+
+
+/*
+ * Activation
+ */
 
 export function activate (context: vscode.ExtensionContext) {
     lisAnnotations = vscode.languages.createDiagnosticCollection('digistar-lis');
