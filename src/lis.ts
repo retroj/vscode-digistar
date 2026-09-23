@@ -19,6 +19,14 @@ async function lisAnnotationsShow (document: vscode.TextDocument): Promise<boole
 
     let lisText: string;
     try {
+        //XXX We use vscode.workspace.openTextDocument instead of
+        //    vscode.workspace.fs.readFile because we cannot guarantee
+        //    that the lis file is UTF-8 encoded, and openTextDocument
+        //    will handle the encoding detection for us.  This has the
+        //    negative side effect that if the lis file is open in
+        //    another editor, we will get the text from that editor
+        //    instead of the file on disk.
+        //
         const lisDocument = await vscode.workspace.openTextDocument(lisUri);
         lisText = lisDocument.getText();
     } catch {
@@ -72,11 +80,17 @@ async function lisAnnotationsShowIfNew (document: vscode.TextDocument): Promise<
 
 function lisWatcherUpdateAnnotations (lisUri: vscode.Uri): void {
     const lisUriString = lisUri.toString();
-    for (const document of vscode.workspace.textDocuments) {
-        if (lisUriForDocument(document)?.toString() === lisUriString) {
-            void lisAnnotationsShow(document);
+    // lisWatcher.onDidChange may fire before the lis file is fully written
+    // to disk, so we have a short delay before updating the annotations.
+    // If we still see issues with stale annotations, we can try more complex
+    // approaches like debouncing the onDidChange event.  
+    setTimeout(() => {
+        for (const document of vscode.workspace.textDocuments) {
+            if (lisUriForDocument(document)?.toString() === lisUriString) {
+                void lisAnnotationsShow(document);
+            }
         }
-    }
+    }, 1000);
 }
 
 
