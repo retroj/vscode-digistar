@@ -23,6 +23,10 @@ The TextMate grammar syntax provides highlighting for the simplest parts of Digi
 
 The semantic highlighter provides parsing-based highlighting of Digistar commands.  It is minimal so far but will grow over time to cover more of the language.
 
+#### Error Annotations
+
+The extension watches for creation and update of .lis files and adds annotations to the .ds buffer to show errors.
+
 ### Configuration Defaults
 
  - tabSize 12.  Accomodates long timestamps.
