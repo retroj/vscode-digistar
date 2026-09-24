@@ -82,6 +82,10 @@ export async function command_digistarIndentLineAndEnter (): Promise<void> {
 }
 
 async function digistarPlayScript (filePath: string): Promise<boolean> {
+    if (! await environment.digistarIsRunning()) {
+        vscode.window.showWarningMessage('Cannot play script. Digistar is not running.');
+        return false;
+    }
     if (! environment.digistarExecutablePath) {
         vscode.window.showWarningMessage('Cannot play script. Digistar executable was not found.');
         return false;
