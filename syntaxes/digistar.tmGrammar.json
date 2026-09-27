@@ -57,7 +57,7 @@
             "1": { "name": "support.class.digistar" }
           }
         },
-        { "match": "(?i)\\b(\\w+)\\s+(is\\s+class|attribute|command|lock|allowChildren|group|\\w+\\s+(flags|default|minimum|maximum))\\b",
+        { "match": "(?i)\\b(\\w+Class)\\s+(is\\s+class|attribute|command|lock|allowChildren|group|\\w+\\s+(flags|default|minimum|maximum))\\b",
           "captures": {
             "1": { "name": "support.class.digistar" }
           }
